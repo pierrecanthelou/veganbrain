@@ -15,7 +15,7 @@ Calculés le 2026-11-22 à partir de `tokens.json` (version 2). Ils sont à refa
   - Chaque paire est mesurée sur le fond réellement rendu.
   - Les mélanges alpha sont arrondis à 8 bits par canal, comme le fait un navigateur.
   - Les halos sont pris à leur point le plus intense.
-- **Focus.** L'indicateur (contour et halo) est mesuré contre ce qui l'entoure : `surface` à l'intérieur, le fond à l'extérieur.
+- **Focus.** Le contour est détaché de l'élément par 2 px : il ne touche que le fond qui entoure l'élément. Il est donc mesuré contre chaque fond où un élément interactif peut se trouver, pas contre l'élément lui-même. Source : https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html, section « Relationship with Focus Visible » : un indicateur extérieur « needs to contrast with the background that the component is on ».
 - **Opacités dérivées.** Voir `color.derived` dans `tokens.json`.
 
 ## Tableau
@@ -44,7 +44,7 @@ Calculés le 2026-11-22 à partir de `tokens.json` (version 2). Ils sont à refa
 | Texte (1.4.3) | encre-douce | cœur du halo potiron (Produits) | 4,5:1 | **4,35 ✗** | 7,08 |
 | Texte (1.4.3) | encre-douce | cœur du halo violet (Recettes) | 4,5:1 | **3,63 ✗** | 7,15 |
 | Texte (1.4.3) | encre-douce | cœur du halo menthe | 4,5:1 | 4,74 | 5,26 |
-| Texte (1.4.3) | encre-douce | pastille au repos dans la barre (repos sur verre) | 4,5:1 | 5,40 | 6,69 |
+| Texte (1.4.3) | encre-douce | pastille au repos dans l'en-tête (repos sur verre) | 4,5:1 | 5,40 | 6,69 |
 | Texte (1.4.3) | encre-douce | pastille au repos, sous le cœur du halo menthe | 4,5:1 | 4,97 | 5,49 |
 | Texte (1.4.3) | encre-douce | bouton de note non choisi, sur fond-haut | 4,5:1 | 5,24 | 7,09 |
 | Texte (1.4.3) | encre-douce | bouton de note non choisi, sur fond-bas | 4,5:1 | 4,85 | 7,94 |
@@ -53,30 +53,52 @@ Calculés le 2026-11-22 à partir de `tokens.json` (version 2). Ils sont à refa
 | Texte (1.4.3) | danger | surface (et surface sur danger) | 4,5:1 | 6,06 | 6,69 |
 | Texte (1.4.3) | danger | fond-haut | 4,5:1 | 5,72 | 7,29 |
 | Texte (1.4.3) | danger | danger-clair | 4,5:1 | 4,81 | 6,17 |
-| Contour ou état (1.4.11) | note-super (contour du champ actif) | surface | 3:1 | **1,99 ✗** | 6,83 |
-| Contour ou état (1.4.11) | menthe (halo du champ actif) | fond-haut | 3:1 | **1,51 ✗** | 8,29 |
-| Contour ou état (1.4.11) | menthe (halo du champ actif) | fond-bas | 3:1 | **1,40 ✗** | 9,17 |
+| Texte (1.4.3) | encre-sur-couleur | encart menthe à 55 % du scan, sur fond-haut (valeur sombre à trancher) | 4,5:1 | 9,15 | **3,61 ✗** |
+| Texte (1.4.3) | encre | encart menthe à 55 % du scan, sur fond-haut (valeur sombre à trancher) | 4,5:1 | 9,15 | **3,97 ✗** |
+| Contour ou état (1.4.11) | note-super (ancien contour du champ actif) | surface | 3:1 | **1,99 ✗** | 6,83 |
+| Contour ou état (1.4.11) | menthe (ancien halo du champ actif) | fond-haut | 3:1 | **1,51 ✗** | 8,29 |
+| Contour ou état (1.4.11) | menthe (ancien halo du champ actif) | fond-bas | 3:1 | **1,40 ✗** | 9,17 |
 | Contour ou état (1.4.11) | bordure (contour des champs) | surface | 3:1 | **1,63 ✗** | 3,10 |
 | Contour ou état (1.4.11) | bordure (contour des champs) | fond-haut | 3:1 | **1,54 ✗** | 3,38 |
-| Contour ou état (1.4.11) | menthe (pastille choisie) | pastille au repos dans la barre | 3:1 | **1,38 ✗** | 6,51 |
+| Contour ou état (1.4.11) | menthe (pastille choisie) | pastille au repos dans l'en-tête | 3:1 | **1,38 ✗** | 6,51 |
 | Repère visuel (non exigé) | surface (boîte de confirmation) | voile sur fond | 3:1 | **2,69 ✗** | **1,33 ✗** |
 | Repère visuel (non exigé) | bordure (contour de la boîte, sombre) | voile sur fond | 3:1 | — | 4,13 |
-| Retenu (focus) | encre-douce (contour de focus, 2 px) | surface | 3:1 | 6,26 | 7,82 |
-| Retenu (focus) | encre-douce (contour de focus, 2 px) | fond-haut | 3:1 | 5,91 | 8,52 |
+| Retenu (focus) | encre-douce (contour de focus détaché, 2 px) | fond-haut | 3:1 | 5,91 | 8,52 |
+| Retenu (focus) | encre-douce (contour de focus détaché, 2 px) | fond-bas | 3:1 | 5,48 | 9,42 |
+| Retenu (focus) | encre-douce (contour de focus détaché, 2 px) | surface | 3:1 | 6,26 | 7,82 |
+| Retenu (focus) | encre-douce (contour de focus détaché, 2 px) | verre de l'en-tête | 3:1 | 6,12 | 8,11 |
+| Retenu (focus) | encre-douce (contour de focus détaché, 2 px) | verre sous le cœur du halo menthe | 3:1 | 5,61 | 6,70 |
+| Retenu (focus) | encre-douce (contour de focus détaché, 2 px) | cœur du halo menthe | 3:1 | 4,74 | 5,26 |
+| Retenu (focus) | encre-douce (contour de focus détaché, 2 px) | cœur du halo potiron | 3:1 | 4,35 | 7,08 |
+| Retenu (focus) | encre-douce (contour de focus détaché, 2 px) | cœur du halo violet | 3:1 | 3,63 | 7,15 |
+| Retenu (focus) | encre-douce (contour de focus détaché, 2 px) | piste Produits | 3:1 | 4,84 | 7,07 |
+| Retenu (focus) | encre-douce (contour de focus détaché, 2 px) | piste Recettes | 3:1 | 4,87 | 7,33 |
+| Retenu (focus) | encre-douce (contour de focus détaché, 2 px) | capsule potiron-clair | 3:1 | 4,56 | 6,41 |
+| Retenu (focus) | encre-douce (contour de focus détaché, 2 px) | capsule violette-clair | 3:1 | 4,77 | 7,46 |
+| Retenu (focus) | encre-douce (contour de focus détaché, 2 px) | vignette | 3:1 | 5,14 | 6,14 |
+| Retenu (focus) | encre-douce (contour de focus détaché, 2 px) | encart menthe à 55 % du scan, sur fond-haut (valeur sombre à trancher) | 3:1 | 4,74 | **2,43 ✗** |
 
 ## Décisions du 2026-11-22
 
 - **Contour de focus.**
-  - Contour de 2 px en `encre-douce`, halo `menthe` conservé, dans les deux thèmes.
-  - Il remplace le contour fin `note-super`, qui ne fait que 1,99:1 en clair.
-  - Voir les lignes « Retenu (focus) ».
+  - Contour de 2 px en `encre-douce`, détaché de l'élément par 2 px, sans halo, dans les deux thèmes, pour le focus comme pour le champ en saisie.
+  - Minimum mesuré, hors encart du scan : 3,6287:1, soit au moins 3,6:1. Voir les lignes « Retenu (focus) ».
+  - Sur l'encart du scan en sombre, s'il garde 55 % : 2,43:1 (`docs/suivi.md`, point 17).
+  - Il remplace deux versions écartées. D'abord le contour fin `note-super` avec halo `menthe` : 1,99:1 sur `surface` en clair, halo contre fond 1,51:1. Ensuite le contour collé à l'élément avec halo `menthe` à l'extérieur, validé un temps : le halo touchait le fond à 1,51:1 en clair, et le contour se confondait en sombre avec les éléments vifs (1,03:1 sur `menthe`, 1,17:1 sur `danger`).
 - **Boîte de confirmation.**
   - En sombre, contour `bordure` de 1 px, parce que l'ombre ne se voit plus sur le voile.
   - Voir les lignes « Repère visuel ».
 
-## Échecs connus du thème clair, non traités à ce jour
+## Échecs connus, non traités à ce jour
+
+Thème clair :
 
 - `bordure` sur `surface` : 1,63:1.
-- Pastille choisie contre pastille au repos : 1,38:1. Le libellé en gras aide ; je ne sais pas encore s'il suffit au critère 1.4.11.
+- Pastille choisie contre pastille au repos : 1,38:1. Le libellé change de couleur mais pas de graisse ; je ne sais pas encore si cela suffit au critère 1.4.11.
 - Texte secondaire au cœur des halos : potiron 4,35:1, violet 3,63:1.
 - Boîte contre voile : 2,69:1, avec une ombre. Ce point n'est pas exigé par WCAG.
+
+Thème sombre :
+
+- Texte de l'encart du scan si l'encart garde 55 % : 3,61:1 en `encre-sur-couleur`, 3,97:1 en `encre`.
+- Focus du lien ODbL dans l'encart du scan si l'encart garde 55 % : 2,43:1.

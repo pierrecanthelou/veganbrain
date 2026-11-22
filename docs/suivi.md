@@ -4,11 +4,10 @@ Dernière mise à jour : 2026-11-22
 
 ## En cours
 
-- Rien. Prochaine tâche : 2c.
+- Rien. Prochaine tâche : 3.
 
 ## À faire
 
-2c. Reporter dans docs/design/README.md les décisions des écarts : exception « À noter » aux produits seulement (README:58), focus visible sur tout élément actif (contour 2 px `encre-douce` + halo `menthe`, décision du 2026-11-22), lien ODbL dans l'encart du scan, feuille de choix des liens, thème sombre (`encre-sur-couleur` sur les fonds vifs, contour `bordure` de la boîte de confirmation en sombre, opacités de `color.derived`), et lever la contradiction sur le fond des pastilles au repos (README:13 et tokens.json `surface` contre README:16 `encre` à 7 %) (preuve : diff du README).
 3. docs/criteres.md : table dorée (identifiant, règle, exemple entrée → sortie, écran, niveau de test), à partir des maquettes lues, relue deux fois : par le sous-agent habituel et par un sous-agent Fable.
 4. Licence Arcmutate open source demandée et essai de branchement Pitest + Arcmutate sur la cible JVM du module partagé (spike).
 5. Tarifs des comptes Apple Developer et Google Play Console sourcés (doc officielle).
@@ -38,7 +37,7 @@ Dernière mise à jour : 2026-11-22
 - 2026-11-22 : écart 6 tranché (preuve : ta réponse « Je la propose »). Je propose une palette sombre dérivée des tokens, avec les contrastes calculés et WCAG AA pour cible. Tu la valides sur un aperçu ; ensuite je l'ajoute au design system.
 - 2026-11-22 : écart 7 tranché (preuve : ta réponse « Pas en V1 »). Sur tablette, la V1 affiche l'interface du téléphone, étirée ; la disposition liste/détail passe en V2 (Parking). Contrainte qui reste : sur Android, avec la cible API 36, les restrictions d'orientation sont ignorées sur les grands écrans (docs/cadrage.md:45). L'interface étirée doit donc fonctionner aussi en paysage.
 - 2026-11-22 : écart 8 tranché (preuve : ta réponse « Dans l'encart du scan »). Le lien « Données Open Food Facts, ODbL » va dans l'encart menthe de « produit à compléter ».
-- 2026-11-22 : écart 9 tranché (preuve : ta réponse « Feuille de choix »). « Lier… » ouvre une feuille avec une recherche et une liste aux mêmes lignes que les écrans de liste ; on peut lier plusieurs éléments. Un lien se retire par une croix sur sa carte, sans confirmation. La feuille sera décrite dans la table dorée.
+- 2026-11-22 : écart 9 tranché (preuve : ta réponse « Feuille de choix »). « Lier… » ouvre une feuille avec une recherche et une liste aux mêmes lignes que les écrans de liste ; on peut lier plusieurs éléments. Un lien se retire par une croix sur sa ligne, sans confirmation. La feuille sera décrite dans la table dorée.
 - 2026-11-22 : écart 10 tranché (preuve : ta réponse « Fiche vide »). Le « + » des recettes ouvre la feuille vide « Nouvelle recette » : sans « Supprimer », aucune source ni note présélectionnée, bouton « Ajouter au carnet ». La note étant obligatoire pour une recette (écart 4), la table dorée devra dire comment l'enregistrement sans note est empêché.
 - 2026-11-22 : écart 11 tranché (preuve : ta réponse « Garder, recherche locale »). La recherche reste dans les deux listes. Elle tourne sur le téléphone, dans les données synchronisées, donc aussi hors réseau. Elle porte sur le nom, la marque et la catégorie pour les produits, sur le nom pour les recettes, et se combine avec le filtre de note.
 - 2026-11-22 : écart 12 tranché (preuve : ta réponse « Les quatre »).
@@ -64,12 +63,17 @@ Dernière mise à jour : 2026-11-22
   Rejeté, preuve contraire à l'appui : la citation kaputt figure bien dans le README (ligne 233, « Verified on macOS against jvm, `iosSimulatorArm64` »). Non confirmés : Arcmutate à 13 $, Zero Trust gratuit jusqu'à 50 utilisateurs, limite iOS de 64 notifications. Les manques de synchro relevés par raisonnement sont ajoutés comme points ouverts, pas comme des faits. Preuve : docs/cadrage.md, sauvegarde de la version précédente dans le scratchpad.
 - 2026-11-22 : **tâche 2b close** : thème sombre validé (preuve : ta réponse « Je valide », sur l'aperçu https://claude.ai/artifact/St8i9jqHVS9FDQ8e15CZo2).
   - docs/design/tokens.json passe en version 2 (sha256 625f7832…) : thème `sombre` sur les 20 couleurs, deux tokens nouveaux `encre-sur-couleur` et `ombre` (valeur `encre` en clair, donc thème clair inchangé), usages des fonds vifs mis à jour, opacités dans `color.derived`.
-  - docs/design/contrastes.md (sha256 8277619c…) : 41 paires mesurées sur le fond réellement rendu, dans les deux thèmes. Le sombre passe tous les seuils AA.
+  - docs/design/contrastes.md (sha256 8277619c…) : 41 paires mesurées sur le fond réellement rendu, dans les deux thèmes. Le sombre passe tous les seuils AA (avant la mesure de l'encart du scan, voir 2c).
   - Focus : contour 2 px `encre-douce` + halo `menthe` dans les deux thèmes (preuve : ta réponse « Contour encre-douce 2 px »). Il remplace le style de l'écart 12, qui ne faisait que 1,99:1 en clair.
   - Relecture : la première version de l'aperçu a été relue par le sous-agent et ses remarques ont été reprises. La version publiée n'a pas eu de seconde relecture.
 - 2026-11-22 : **tâche 2 close** : dépôt public https://github.com/pierrecanthelou/veganbrain, branche `main`, commit initial 116b417 (preuve : ta réponse « Oui, public veganbrain », `gh repo view` → PUBLIC main, `git status` propre).
   - `.gitignore` : `.dev.vars*`, `.env*`, `.wrangler/` repris du gabarit Workers officiel (cloudflare/workers-sdk, create-cloudflare) ; Gradle, Kotlin, Android et Swift repris de github/gitignore (commit eeb775f7cbd2). Ajouts de ma part, sans source : `*.p8`, `*.p12`, `*.mobileprovision`, `GoogleService-Info.plist`, `.DS_Store`, `Thumbs.db`.
   - Exclusions testées avec `git check-ignore` ; recherche d'adresses e-mail, de jetons et de chemins personnels dans docs/ : rien trouvé.
+- 2026-11-22 : **tâche 2c close** : décisions des écarts et thème sombre reportés dans docs/design/README.md et docs/design/tokens.json (preuve : diff du commit « Tâche 2c : décisions des écarts et thème sombre dans le design system »).
+  - Relecture par le sous-agent : 9 corrections (C1 à C9) et 6 points à discuter (D1 à D6). J'ai relu chaque preuve citée dans les maquettes avant de corriger. Les points antérieurs à 2c (D5) passent en « À trancher ».
+  - Seconde relecture : 9 corrections et 8 points à discuter, preuves relues dans les maquettes et recalculées. Tout est appliqué, sauf la mise à jour des renvois de ligne dans l'historique de ce fichier, qui désignent la version du commit 116b417.
+  - Focus : la géométrie validée plus tôt (contour collé + halo `menthe`) ne tenait pas. Le halo touchait le fond à 1,51:1 en clair, et le contour se confondait en sombre avec les éléments vifs (1,03:1 sur `menthe`). Elle est remplacée par un contour de 2 px `encre-douce`, détaché de l'élément par 2 px, sans halo (preuve : ta réponse « Contour détaché, sans halo »). Minimum 3,6:1 sur 13 fonds, dans les deux thèmes ; seul l'encart du scan, en sombre à 55 %, descend à 2,4:1 (point 17).
+  - docs/design/contrastes.md régénéré : 55 paires, avec les mesures du nouveau focus et de l'encart du scan. Règle relue dans WCAG, Understanding 1.4.11, section « Relationship with Focus Visible ».
 
 ## À trancher
 
@@ -89,8 +93,26 @@ Dernière mise à jour : 2026-11-22
 
 Relevé à la tâche 2b, à trancher avant les tests d'accessibilité (docs/design/contrastes.md, thème clair) :
 13. contour des champs `bordure` sur `surface` : 1,63:1 pour 3:1 exigé ;
-14. pastille choisie contre pastille au repos : 1,38:1 (le gras du libellé suffit-il ?) ;
+14. pastille choisie contre pastille au repos : 1,38:1. Le libellé change de couleur, pas de graisse (Main.dc.html:27) : cela suffit-il ?
 15. texte secondaire au cœur des halos : potiron 4,35:1, violet 3,63:1 pour 4,5:1 exigé.
+
+Relevé à la tâche 2c :
+16. valeur en sombre des opacités qui n'en ont qu'en clair :
+    - voile des fiches, `ombre` à 30 % (Produit.dc.html:35) ;
+    - ombre de la feuille, 22 % (Produit.dc.html:36) ;
+    - poignée, `encre` à 22 % (Produit.dc.html:38) ;
+    - ombre de « Changer la photo », 16 % (Produit.dc.html:49) ;
+    - ombre de la boîte de confirmation, 28 % (ConfirmProduit.dc.html:23).
+17. encart `menthe` du scan en sombre (ScanInconnu.dc.html:45).
+    - À 55 %, le texte n'atteint que 3,61:1 en `encre-sur-couleur` et 3,97:1 en `encre`, et le focus du lien ODbL 2,43:1.
+    - À 22 %, comme le halo, `encre` donne 8,62:1 et le focus 5,26:1 ; mais le texte doit alors passer en `encre` (`encre-sur-couleur` : 1,66:1), exception au README.
+    - Ces mesures prennent `fond-haut` nu ; dans la maquette, l'encart est aussi sous le halo `menthe` de la feuille (ScanInconnu.dc.html:36). À remesurer une fois la valeur choisie.
+18. rayon des pastilles : `radius-pill` vaut 24 px, mais les maquettes dessinent 22 px (Produit.dc.html:103, Creation.dc.html:49). Le token est aussi donné pour le bouton Ajouter, qui est un cercle de rayon 30 px (Main.dc.html:98).
+19. points antérieurs relevés à la relecture 2c :
+    - `note-super` est employé hors des notes : contour de 2 px (Scan.dc.html:35, ScanConnu.dc.html:24), pointillés de la zone photo ;
+    - `menthe` est dit marquer les « actions secondaires » ;
+    - `encre-douce` est employé au-delà de `fond`, `surface` et `vignette` (pistes, halos, capsules ; contrastes.md).
+20. focus, deux cas d'implémentation : la recherche n'a pas de contour propre (`outline: 0`, Main.dc.html:42), le focus doit être porté par le `label` qui l'englobe (Main.dc.html:39) ; l'action « Supprimer » révélée au glissement touche le bord de l'écran (ListeGlisser.dc.html:61), son contour détaché serait rogné.
 
 ## Parking
 
