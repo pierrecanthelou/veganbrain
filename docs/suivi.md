@@ -4,11 +4,10 @@ Dernière mise à jour : 2026-11-22
 
 ## En cours
 
-- Tâche 2 : dépôt git initialisé en local (branche `main`, `.gitignore` sourcé sur les gabarits Cloudflare et GitHub). Reste : commit initial et dépôt public sur GitHub, avec ton accord.
+- Rien. Prochaine tâche : 2c.
 
 ## À faire
 
-2. Dépôt git initialisé, public, avec `.gitignore` excluant les secrets (preuve : `git status` propre, aucun secret suivi).
 2c. Reporter dans docs/design/README.md les décisions des écarts : exception « À noter » aux produits seulement (README:58), focus visible sur tout élément actif (contour 2 px `encre-douce` + halo `menthe`, décision du 2026-11-22), lien ODbL dans l'encart du scan, feuille de choix des liens, thème sombre (`encre-sur-couleur` sur les fonds vifs, contour `bordure` de la boîte de confirmation en sombre, opacités de `color.derived`), et lever la contradiction sur le fond des pastilles au repos (README:13 et tokens.json `surface` contre README:16 `encre` à 7 %) (preuve : diff du README).
 3. docs/criteres.md : table dorée (identifiant, règle, exemple entrée → sortie, écran, niveau de test), à partir des maquettes lues, relue deux fois : par le sous-agent habituel et par un sous-agent Fable.
 4. Licence Arcmutate open source demandée et essai de branchement Pitest + Arcmutate sur la cible JVM du module partagé (spike).
@@ -68,6 +67,9 @@ Dernière mise à jour : 2026-11-22
   - docs/design/contrastes.md (sha256 8277619c…) : 41 paires mesurées sur le fond réellement rendu, dans les deux thèmes. Le sombre passe tous les seuils AA.
   - Focus : contour 2 px `encre-douce` + halo `menthe` dans les deux thèmes (preuve : ta réponse « Contour encre-douce 2 px »). Il remplace le style de l'écart 12, qui ne faisait que 1,99:1 en clair.
   - Relecture : la première version de l'aperçu a été relue par le sous-agent et ses remarques ont été reprises. La version publiée n'a pas eu de seconde relecture.
+- 2026-11-22 : **tâche 2 close** : dépôt public https://github.com/pierrecanthelou/veganbrain, branche `main`, commit initial 116b417 (preuve : ta réponse « Oui, public veganbrain », `gh repo view` → PUBLIC main, `git status` propre).
+  - `.gitignore` : `.dev.vars*`, `.env*`, `.wrangler/` repris du gabarit Workers officiel (cloudflare/workers-sdk, create-cloudflare) ; Gradle, Kotlin, Android et Swift repris de github/gitignore (commit eeb775f7cbd2). Ajouts de ma part, sans source : `*.p8`, `*.p12`, `*.mobileprovision`, `GoogleService-Info.plist`, `.DS_Store`, `Thumbs.db`.
+  - Exclusions testées avec `git check-ignore` ; recherche d'adresses e-mail, de jetons et de chemins personnels dans docs/ : rien trouvé.
 
 ## À trancher
 
