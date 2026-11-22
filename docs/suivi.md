@@ -4,14 +4,14 @@ Dernière mise à jour : 2026-11-22
 
 ## En cours
 
-- Rien. Prochaine tâche : 3.
+- 4. Arcmutate et Pitest : à démarrer sur ton feu vert.
 
 ## À faire
 
-3. docs/criteres.md : table dorée (identifiant, règle, exemple entrée → sortie, écran, niveau de test), à partir des maquettes lues, relue deux fois : par le sous-agent habituel et par un sous-agent Fable.
 4. Licence Arcmutate open source demandée et essai de branchement Pitest + Arcmutate sur la cible JVM du module partagé (spike).
 5. Tarifs des comptes Apple Developer et Google Play Console sourcés (doc officielle).
 6. Suite de la phase 2 (tests unitaires, mutation, E2E Maestro, CI, accessibilité) : découpée en tâches une fois la table dorée écrite.
+7. Créer l'adresse de contact dédiée au User-Agent OFF (par toi, hors dépôt), avant le premier appel à OFF (docs/criteres.md, OFF-02).
 
 ## Fait
 
@@ -85,6 +85,11 @@ Dernière mise à jour : 2026-11-22
 - 2026-11-22 : point 20 tranché, reporté dans docs/design/README.md (Focus) :
   - recherche : le focus entoure le `label`, qui dessine le cadre du champ ; conséquence directe de la règle, annoncée sans question ;
   - « Supprimer » révélé au glissement : contour intérieur de 2 px en `surface` sur `danger`, 6,06:1 en clair et 6,69:1 en sombre, seule exception au contour détaché (preuve : ta réponse « Contour intérieur »).
+- 2026-11-22 : **tâche 3 close** : docs/criteres.md, table dorée en 12 sections (LIS, CHR, SCN, FPR, RAP, RCT, LIE, SUP, ERR, SYN, OFF, A11), identifiants d'accessibilité communs (section 13) et relevés à fixer en phase 2 (section 14). Preuves :
+  - tes réponses Q-1 « Bouton grisé », Q-2 « Formulaire, nom facultatif », Q-3 « Image OFF proposée », Q-4 « 19 h, avant le dîner », Q-5 « Boîte Abandonner ? », Q-6 « Pastille + rappel modifiable », Q-7 « À noter, puis récents », Q-8 « Ignorer casse et accents », Q-9 « Page en chiffres, lien web », Q-10 « Adresse dédiée à l'app », Q-11 « Saisir le code », Q-12 « Actif, nom laissé vide » ;
+  - relecture par le sous-agent habituel, puis contre-relecture Fable ; corrections appliquées après relecture de leurs preuves ; diff des corrections relu une troisième fois ;
+  - les « choix annoncés » de la table sont des choix réversibles faits sans question, à contester si besoin ;
+  - Q-3 affine le « pas de redistribution » de docs/cadrage.md:283 : l'image d'OFF est copiée dans R2, pour les seuls membres du carnet, avec sa mention CC BY-SA (OFF-05).
 
 ## À trancher
 
