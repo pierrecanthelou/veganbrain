@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Scanner ou photographier un produit</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap">
+<style>
+body{margin:0}
+a{color:#1F3A2B}a:hover{color:#2F6B4A}
+.pouce{transition:transform .28s cubic-bezier(.3,.7,.2,1)}
+.pouce.photo{transform:translateX(124px)}
+@keyframes apparait{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.apparait{animation:apparait .28s ease both}
+@media (prefers-reduced-motion: reduce){.pouce{transition:none}.apparait{animation:none}}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; position: relative; isolation: isolate; padding: 32px 20px 34px; background: radial-gradient(470px 380px at 0% 100%, rgba(238, 144, 72, 0.32) 0%, rgba(238, 144, 72, 0) 65%), radial-gradient(100% 45% at 100% 0%, rgba(168, 213, 176, 0.55) 0%, rgba(168, 213, 176, 0) 70%), linear-gradient(180deg, #F0F8EE 0%, #E3F1E4 100%); color: #1F3A2B; font-family: Inter, system-ui, sans-serif; display: flex; flex-direction: column; align-items: center; gap: 20px; overflow: hidden">
+<div style="align-self: stretch; display: flex; align-items: center; gap: 4px; margin: -32px -20px 0; padding: 20px 20px 12px; background: rgba(251, 253, 250, 0.6); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-bottom: 1px solid #B5CFB8; box-shadow: 0 1px 0 #FBFDFA">
+<a href="Main.dc.html" aria-label="Fermer" style="display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; margin-left: -12px; color: #1F3A2B">
+<svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+</a>
+<h1 style="margin: 0; font-family: 'Space Grotesk', system-ui, sans-serif; font-size: 22px; line-height: 28px; font-weight: 700; letter-spacing: -0.3px">Identifier un produit</h1>
+</div>
+<div role="group" aria-label="Mode de capture" style="position: relative; display: flex; gap: 4px; padding: 4px; border-radius: 26px; background: #D9EBDA">
+<div class="{{pouceClass}}" aria-hidden="true" style="position: absolute; left: 4px; top: 4px; width: 120px; height: 44px; border-radius: 22px; background: #A8D5B0"></div>
+<button type="button" aria-pressed="{{codeOn}}" onClick="{{pickCode}}" style="position: relative; width: 120px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: #1F3A2B; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer">Code-barres</button>
+<button type="button" aria-pressed="{{photoOn}}" onClick="{{pickPhoto}}" style="position: relative; width: 120px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: #1F3A2B; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer">Photo</button>
+</div>
+<sc-if value="{{codeOn}}" hint-placeholder-val="{{true}}">
+<div class="apparait" style="width: 310px; height: 200px; box-sizing: border-box; border: 2px solid #7BC59B; border-radius: 16px; background: #FBFDFA; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px">
+<svg aria-hidden="true" width="56" height="40" viewBox="0 0 28 20" fill="none" stroke="#4A6553" stroke-width="1.6" stroke-linecap="round"><path d="M3 3v14M6 3v14M10 3v14M13 3v14M17 3v14M20 3v14M22.5 3v14M25 3v14"></path></svg>
+<div style="font-size: 13px; color: #4A6553">Aperçu de la caméra</div>
+</div>
+<p style="margin: 0; max-width: 300px; text-align: center; font-size: 15px; line-height: 22px; color: #4A6553">Placez le code-barres dans le cadre. La fiche s'ouvre dès qu'il est reconnu.</p>
+</sc-if>
+<sc-if value="{{photoOn}}" hint-placeholder-val="{{false}}">
+<div class="apparait" style="width: 310px; height: 340px; box-sizing: border-box; border: 2px solid #7BC59B; border-radius: 16px; background: #FBFDFA; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px">
+<svg aria-hidden="true" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#4A6553" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l1.5-2.5h7L17 8h3v11H4z"></path><circle cx="12" cy="13" r="3.5"></circle></svg>
+<div style="font-size: 13px; color: #4A6553">Aperçu de la caméra</div>
+</div>
+<p style="margin: 0; max-width: 300px; text-align: center; font-size: 15px; line-height: 22px; color: #4A6553">Cadrez la face avant de l'emballage. Le nom et la marque sont proposés, à corriger si besoin.</p>
+</sc-if>
+<a href="Creation.dc.html" style="display: flex; align-items: center; justify-content: center; height: 44px; padding: 0 16px; font-size: 15px; font-weight: 600; color: #1F3A2B">Saisir le nom à la main</a>
+<div style="flex-grow: 1"></div>
+<sc-if value="{{codeOn}}" hint-placeholder-val="{{true}}">
+<a href="ScanConnu.dc.html" aria-label="Capturer" style="display: flex; align-items: center; justify-content: center; width: 76px; height: 76px; box-sizing: border-box; border-radius: 38px; border: 4px solid #EE9048">
+<span style="display: block; width: 58px; height: 58px; border-radius: 29px; background: #EE9048"></span>
+</a>
+</sc-if>
+<sc-if value="{{photoOn}}" hint-placeholder-val="{{false}}">
+<a href="ScanInconnu.dc.html" aria-label="Capturer" style="display: flex; align-items: center; justify-content: center; width: 76px; height: 76px; box-sizing: border-box; border-radius: 38px; border: 4px solid #EE9048">
+<span style="display: block; width: 58px; height: 58px; border-radius: 29px; background: #EE9048"></span>
+</a>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const mode = (this.state && this.state.mode) || 'code';
+    return {
+      codeOn: mode === 'code',
+      photoOn: mode === 'photo',
+      pouceClass: mode === 'photo' ? 'pouce photo' : 'pouce',
+      pickCode: () => this.setState({ mode: 'code' }),
+      pickPhoto: () => this.setState({ mode: 'photo' })
+    };
+  }
+}
+</script>
+</body>
+</html>

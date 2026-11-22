@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Liste : glisser pour supprimer</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap">
+<style>
+body{margin:0}
+a{color:#1F3A2B}a:hover{color:#2F6B4A}
+@keyframes capsule-in{from{left:140px;background:#E3DAF8}to{left:0px;background:#F8D3B0}}
+@keyframes rond-in{from{background:#B197E6}to{background:#EE9048}}
+@keyframes piste-in{from{background:rgba(238, 144, 72, 0.16)}to{background:rgba(177, 151, 230, 0.18)}}
+.capsule{animation:capsule-in .45s cubic-bezier(.3,.7,.2,1) both}
+.rond{animation:rond-in .45s ease both}
+.piste{animation:piste-in .45s ease both}
+@media (prefers-reduced-motion: reduce){.capsule,.rond,.piste{animation:none}}
+@keyframes balayage{from{transform:translateY(-3.5px)}to{transform:translateY(3.5px)}}
+.balayage{animation:balayage 1.3s ease-in-out infinite alternate}
+@media (prefers-reduced-motion: reduce){.balayage{animation:none}}
+.filtre{background:rgba(31,58,43,.07);color:#4A6553;transition:background-color .22s ease,color .22s ease,transform .15s ease}
+.filtre:active{transform:scale(.95)}
+.filtre.on{color:#1F3A2B}
+.filtre.on.f-tous{background:#A8D5B0}.filtre.on.f-super{background:#7BC59B}.filtre.on.f-bon{background:#D9EFC4}.filtre.on.f-pas{background:#F1C4B6}
+@media (prefers-reduced-motion: reduce){.filtre,.note,.seg{transition:none}}
+@keyframes glisser{from{transform:none}to{transform:translateX(-104px)}}
+.rang.glisse{animation:glisser .45s .5s cubic-bezier(.3,.7,.2,1) both}
+@media (prefers-reduced-motion: reduce){.rang.glisse{animation:none;transform:translateX(-104px)}}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; position: relative; isolation: isolate; background: radial-gradient(470px 380px at 0% 100%, rgba(238, 144, 72, 0.32) 0%, rgba(238, 144, 72, 0) 65%), radial-gradient(100% 45% at 100% 0%, rgba(168, 213, 176, 0.55) 0%, rgba(168, 213, 176, 0) 70%), linear-gradient(180deg, #F0F8EE 0%, #E3F1E4 100%); color: #1F3A2B; font-family: Inter, system-ui, sans-serif; display: flex; flex-direction: column; overflow: hidden">
+<header style="position: absolute; z-index: 2; left: 0; top: 0; width: 390px; box-sizing: border-box; padding: 20px 20px 16px; background: rgba(251, 253, 250, 0.6); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-bottom: 1px solid #B5CFB8; box-shadow: 0 1px 0 #FBFDFA; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<h1 style="margin: 0; font-family: 'Space Grotesk', system-ui, sans-serif; font-size: 30px; line-height: 40px; font-weight: 700; letter-spacing: -0.5px">Nos produits</h1>
+<div aria-hidden="true" style="width: 36px; height: 5px; border-radius: 3px; background: #EE9048"></div>
+</div>
+<div style="display: flex; gap: 8px">
+<label style="flex-grow: 1; min-width: 0; display: flex; align-items: center; gap: 10px; height: 48px; box-sizing: border-box; padding: 0 14px; background: #FBFDFA; border: 1px solid #B5CFB8; border-radius: 12px">
+<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4A6553" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"></circle><path d="M16 16l4.5 4.5"></path></svg>
+<span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%)">Chercher dans nos notes</span>
+<input type="search" placeholder="Chercher dans nos notes" style="flex-grow: 1; min-width: 0; height: 44px; border: 0; outline: 0; background: transparent; font-family: inherit; font-size: 15px; color: #1F3A2B">
+</label>
+<a href="Scan.dc.html" aria-label="Scanner un produit en magasin" style="flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; box-sizing: border-box; border: 1px solid #B5CFB8; border-radius: 12px; background: #FBFDFA; color: #1F3A2B">
+<svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V5h3M17 5h3v3M20 16v3h-3M7 19H4v-3"></path><path d="M8 9v6M11 9v6M14 9v6M16.5 9v6"></path><path class="balayage" stroke="#EE9048" stroke-width="2.4" d="M5.5 12h13"></path></svg>
+</a>
+</div>
+<div style="display: flex; gap: 8px">
+<sc-for list="{{chips}}" as="chip" hint-placeholder-count="4">
+<button type="button" aria-pressed="{{chip.on}}" onClick="{{chip.pick}}" class="{{chip.cls}}" style="height: 44px; padding: 0 12px; border: 0; border-radius: 22px; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 5px"><sc-if value="{{chip.isSuper}}" hint-placeholder-val="{{false}}"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l2.6 5.3 5.9.9-4.2 4.1 1 5.8L12 16.9 6.7 19.6l1-5.8L3.5 9.7l5.9-.9z"></path></svg></sc-if><sc-if value="{{chip.isBon}}" hint-placeholder-val="{{false}}"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></sc-if><sc-if value="{{chip.isPas}}" hint-placeholder-val="{{false}}"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"></path></svg></sc-if><span>{{chip.label}}</span></button>
+</sc-for>
+</div>
+</header>
+<div style="position: absolute; left: 0; top: 0; width: 390px; height: 844px; box-sizing: border-box; overflow-y: auto; padding: 214px 20px 124px; -webkit-mask-image: linear-gradient(180deg, #000 0, #000 calc(100% - 120px), rgba(0, 0, 0, 0) calc(100% - 82px)); mask-image: linear-gradient(180deg, #000 0, #000 calc(100% - 120px), rgba(0, 0, 0, 0) calc(100% - 82px))">
+<sc-for list="{{items}}" as="item" hint-placeholder-count="8">
+<div style="position: relative; height: 76px">
+<sc-if value="{{item.glisse}}" hint-placeholder-val="{{false}}">
+<a href="ConfirmProduit.dc.html" style="position: absolute; right: -20px; top: 0; width: 104px; height: 75px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; background: #B42F2F; color: #FBFDFA; text-decoration: none; font-size: 13px; font-weight: 600"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7h14M10 7V5h4v2M7 7l1 12h8l1-12M10 11v5M14 11v5"></path></svg><span>Supprimer</span></a>
+</sc-if>
+<a href="Produit.dc.html" class="{{item.cls}}" style="position: relative; display: flex; align-items: center; gap: 12px; height: 76px; box-sizing: border-box; border-bottom: 1px solid #FBFDFA; box-shadow: inset 0 -1px 0 #B5CFB8; text-decoration: none; color: #1F3A2B">
+<div style="flex-shrink: 0; width: 52px; height: 52px; border-radius: 10px; background: #D9EBDA; display: flex; align-items: center; justify-content: center">
+<svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4A6553" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="14" rx="2"></rect><path d="M4 16l4.5-4.5 3.5 3.5 2.5-2.5L20 17"></path></svg>
+</div>
+<div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px">
+<div style="font-size: 15px; line-height: 20px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{item.name}}</div>
+<div style="font-size: 13px; line-height: 18px; color: #4A6553; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{item.meta}}</div>
+</div>
+<sc-if value="{{item.isSuper}}" hint-placeholder-val="{{true}}">
+<div role="img" aria-label="Super" style="flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; box-sizing: border-box; border-radius: 18px; background: #7BC59B; color: #1F3A2B">
+<svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l2.6 5.3 5.9.9-4.2 4.1 1 5.8L12 16.9 6.7 19.6l1-5.8L3.5 9.7l5.9-.9z"></path></svg>
+</div>
+</sc-if>
+<sc-if value="{{item.isBon}}" hint-placeholder-val="{{false}}">
+<div role="img" aria-label="Bon" style="flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; box-sizing: border-box; border-radius: 18px; background: #D9EFC4; color: #1F3A2B">
+<svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+</div>
+</sc-if>
+<sc-if value="{{item.isPas}}" hint-placeholder-val="{{false}}">
+<div role="img" aria-label="Pas bon" style="flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; box-sizing: border-box; border-radius: 18px; background: #F1C4B6; color: #1F3A2B">
+<svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+</div>
+</sc-if>
+<sc-if value="{{item.isAttente}}" hint-placeholder-val="{{false}}">
+<div role="img" aria-label="À noter" style="flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; box-sizing: border-box; border-radius: 18px; border: 1.5px dashed #4A6553; background: #FBFDFA; color: #1F3A2B">
+<svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"></circle><path d="M12 8v4l3 2"></path></svg>
+</div>
+</sc-if>
+</a>
+</div>
+</sc-for>
+</div>
+<nav aria-label="Navigation principale" style="position: absolute; z-index: 2; left: 25px; bottom: 31px; width: 340px; height: 48px; display: flex; align-items: center; justify-content: space-between">
+<div class="piste" style="position: absolute; left: 0; top: 0; width: 340px; height: 48px; border-radius: 24px; background: rgba(177, 151, 230, 0.18)"></div>
+<div class="capsule" style="position: absolute; left: 0px; top: 0; width: 200px; height: 48px; border-radius: 24px; background: #F8D3B0"></div>
+<a href="Main.dc.html" aria-current="page" style="position: relative; display: flex; align-items: center; justify-content: center; gap: 8px; width: 132px; height: 48px; text-decoration: none; color: #1F3A2B; font-size: 14px; font-weight: 600">
+<svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8l8-4 8 4v8l-8 4-8-4z"></path><path d="M4 8l8 4 8-4M12 12v8"></path></svg>
+<span>Produits</span>
+</a>
+<a href="Recettes.dc.html" style="position: relative; display: flex; align-items: center; justify-content: center; gap: 8px; width: 132px; height: 48px; text-decoration: none; color: #4A6553; font-size: 14px; font-weight: 500">
+<svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11h16a8 8 0 0 1-16 0z"></path><path d="M9 4c0 1.5 1 1.5 1 3M14 4c0 1.5 1 1.5 1 3"></path></svg>
+<span>Recettes</span>
+</a>
+<a class="rond" href="Scan.dc.html" aria-label="Ajouter un produit" style="position: absolute; left: 140px; top: -6px; display: flex; align-items: center; justify-content: center; width: 60px; height: 60px; border-radius: 30px; background: #EE9048; color: #1F3A2B">
+<svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+</a>
+</nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const filter = (this.state && this.state.filter) || 'tous';
+    const all = [
+      { name: 'Steak de seitan grillé', meta: 'Atelier du Blé · scanné en magasin', note: 'attente' },
+      { name: 'Steak végétal au poivre', meta: 'Les Prés Verts · Simili-carné', note: 'super' },
+      { name: 'Râpé végétal façon emmental', meta: 'Maison Cajou · Fromages végétaux', note: 'bon' },
+      { name: 'Yaourt coco vanille', meta: 'Coco & Compagnie · Desserts', note: 'super' },
+      { name: 'Nuggets de blé', meta: 'Atelier du Blé · Simili-carné', note: 'pas' },
+      { name: 'Boisson avoine barista', meta: 'Avoine du Nord · Boissons', note: 'bon' },
+      { name: 'Saucisses végétales fumées', meta: 'Ferme des Pois · Simili-carné', note: 'bon' },
+      { name: 'Crème d’avoine cuisine', meta: 'Avoine du Nord · Crèmes', note: 'super' },
+      { name: 'Tofu fumé au bois de hêtre', meta: 'Les Prés Verts · Tofu', note: 'super' },
+      { name: 'Mayonnaise sans œuf', meta: 'Épicerie Colibri · Sauces', note: 'pas' },
+      { name: 'Glace vanille coco', meta: 'Coco & Compagnie · Desserts', note: 'bon' },
+      { name: 'Pâte à tartiner noisette', meta: 'Épicerie Colibri · Petit-déjeuner', note: 'super' },
+      { name: 'Burger de pois chiches', meta: 'Ferme des Pois · Simili-carné', note: 'pas' },
+      { name: 'Chocolat noir aux amandes', meta: 'Épicerie Colibri · Douceurs', note: 'bon' }
+    ];
+    const items = all
+      .filter((p) => filter === 'tous' || p.note === filter)
+      .map((p) => ({ ...p, isSuper: p.note === 'super', isBon: p.note === 'bon', isPas: p.note === 'pas', isAttente: p.note === 'attente', glisse: p.name === 'Râpé végétal façon emmental', cls: p.name === 'Râpé végétal façon emmental' ? 'rang glisse' : 'rang' }));
+    const chips = [
+      { id: 'tous', label: 'Tous' },
+      { id: 'super', label: 'Super' },
+      { id: 'bon', label: 'Bon' },
+      { id: 'pas', label: 'Pas bon' }
+    ].map((c) => ({ ...c, isSuper: c.id === 'super', isBon: c.id === 'bon', isPas: c.id === 'pas', cls: 'filtre f-' + c.id + (c.id === filter ? ' on' : ''), on: c.id === filter, off: c.id !== filter, pick: () => this.setState({ filter: c.id }) }));
+    return { items, chips };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,149 @@
+{
+  "v": 3,
+  "createdOnFiles": {
+    "v": 1,
+    "at": "2026-11-21T10:00:00Z"
+  },
+  "title": "Carnet vegan – produits et recettes",
+  "launch": {
+    "view": "canvas"
+  },
+  "pages": [],
+  "boards": {
+    "Main.dc.html": {
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "1 · Nos produits",
+      "is_interactive": true
+    },
+    "Scan.dc.html": {
+      "x": 470,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "2 · Scanner ou photographier",
+      "is_interactive": true
+    },
+    "ScanConnu.dc.html": {
+      "x": 940,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "3 · Scan : produit déjà noté",
+      "is_interactive": true
+    },
+    "ScanInconnu.dc.html": {
+      "x": 1410,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "4 · Scan : produit à compléter",
+      "is_interactive": true
+    },
+    "Produit.dc.html": {
+      "x": 1880,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "5 · Fiche produit",
+      "is_interactive": true
+    },
+    "Creation.dc.html": {
+      "x": 2350,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "6 · Créer un produit à la main",
+      "is_interactive": true
+    },
+    "ListeGlisser.dc.html": {
+      "x": 2820,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "7 · Liste : glisser pour supprimer",
+      "is_interactive": true
+    },
+    "ConfirmProduit.dc.html": {
+      "x": 3290,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "8 · Confirmer la suppression",
+      "is_interactive": true
+    },
+    "Erreur.dc.html": {
+      "x": 3760,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "9 · Erreur",
+      "is_interactive": true
+    },
+    "Recettes.dc.html": {
+      "x": 0,
+      "y": 1300,
+      "w": 390,
+      "h": 844,
+      "title": "10 · Nos recettes",
+      "is_interactive": true
+    },
+    "Recette.dc.html": {
+      "x": 470,
+      "y": 1300,
+      "w": 390,
+      "h": 844,
+      "title": "11 · Fiche recette",
+      "is_interactive": true
+    },
+    "ConfirmRecette.dc.html": {
+      "x": 940,
+      "y": 1300,
+      "w": 390,
+      "h": 844,
+      "title": "12 · Confirmer la suppression",
+      "is_interactive": true
+    }
+  },
+  "order": [
+    "Main.dc.html",
+    "Scan.dc.html",
+    "ScanConnu.dc.html",
+    "ScanInconnu.dc.html",
+    "Produit.dc.html",
+    "Creation.dc.html",
+    "ListeGlisser.dc.html",
+    "ConfirmProduit.dc.html",
+    "Erreur.dc.html",
+    "Recettes.dc.html",
+    "Recette.dc.html",
+    "ConfirmRecette.dc.html"
+  ],
+  "notes": {
+    "t-produits": {
+      "x": 0,
+      "y": -300,
+      "text": "Produits : retrouver, scanner, noter, supprimer",
+      "kind": "title1",
+      "maxW": 4150
+    },
+    "t-recettes": {
+      "x": 0,
+      "y": 1000,
+      "text": "Recettes : liste, fiche liée aux produits, suppression",
+      "kind": "title1",
+      "maxW": 1330
+    }
+  },
+  "designSystems": [
+    {
+      "title": "Carnet vegan – design system",
+      "namespace": "carnet-vegan",
+      "artifact": "https://claude.ai/artifact/PYW9YG1w1FCwhYomsFtSXW",
+      "version": "1795333659-1878",
+      "copiedAt": "2026-11-22T07:48:00Z"
+    }
+  ]
+}

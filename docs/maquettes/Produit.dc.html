@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Fiche produit</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap">
+<style>
+body{margin:0}
+a{color:#1F3A2B}a:hover{color:#2F6B4A}
+.defile>*{flex-shrink:0}
+.note{border:0;background:rgba(31,58,43,.07);color:#4A6553;transition:background-color .22s ease,color .22s ease,box-shadow .22s ease,transform .15s ease}
+.note:active{transform:scale(.97)}
+.note.on{color:#1F3A2B;box-shadow:0 2px 10px rgba(31,58,43,.18)}
+.note.on.n-pas{background:#F1C4B6}.note.on.n-bon{background:#D9EFC4}.note.on.n-super{background:#7BC59B}
+.seg{border:0;background:rgba(31,58,43,.07);color:#4A6553;transition:background-color .22s ease,color .22s ease,box-shadow .22s ease,transform .15s ease}
+.seg:active{transform:scale(.97)}
+.seg.on{color:#1F3A2B;background:#A8D5B0;box-shadow:0 2px 10px rgba(31,58,43,.18)}
+.filtre{background:rgba(31,58,43,.07);color:#4A6553;transition:background-color .22s ease,color .22s ease,box-shadow .22s ease,transform .15s ease}
+.filtre:active{transform:scale(.95)}
+.filtre.on{color:#1F3A2B;background:#A8D5B0}
+@keyframes monte{from{transform:translateY(100%)}to{transform:none}}
+.feuille{animation:monte .42s cubic-bezier(.2,.8,.2,1) both}
+@keyframes apparait{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.apparait{animation:apparait .28s ease both}
+@media (prefers-reduced-motion: reduce){.feuille,.apparait{animation:none}.note,.seg,.filtre{transition:none}}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; position: relative; isolation: isolate; background: linear-gradient(180deg, #F0F8EE 0%, #E3F1E4 100%); color: #1F3A2B; font-family: Inter, system-ui, sans-serif; overflow: hidden">
+<div aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 390px; box-sizing: border-box; padding: 20px 20px 0; font-family: 'Space Grotesk', system-ui, sans-serif; font-size: 26px; line-height: 36px; font-weight: 700; letter-spacing: -0.4px">Nos produits</div>
+<div aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 390px; height: 844px; background: rgba(31, 58, 43, 0.3)"></div>
+<div class="feuille" style="position: absolute; left: 0; top: 72px; width: 390px; height: 772px; box-sizing: border-box; padding: 8px 0 0; border-radius: 28px 28px 0 0; background: radial-gradient(470px 380px at 0% 100%, rgba(238, 144, 72, 0.32) 0%, rgba(238, 144, 72, 0) 65%), radial-gradient(100% 45% at 100% 0%, rgba(168, 213, 176, 0.55) 0%, rgba(168, 213, 176, 0) 70%), linear-gradient(180deg, #F0F8EE 0%, #E3F1E4 100%); box-shadow: 0 -8px 30px rgba(31, 58, 43, 0.22); display: flex; flex-direction: column">
+<div style="position: relative; flex-shrink: 0; height: 44px; margin: 0 20px; display: flex; align-items: center; justify-content: center">
+<div aria-hidden="true" style="width: 36px; height: 5px; border-radius: 3px; background: rgba(31, 58, 43, 0.22)"></div>
+<a href="ConfirmProduit.dc.html" style="position: absolute; left: -8px; top: 0; height: 44px; padding: 0 8px; display: flex; align-items: center; gap: 6px; color: #B42F2F; text-decoration: none; font-size: 14px; font-weight: 600"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7h14M10 7V5h4v2M7 7l1 12h8l1-12M10 11v5M14 11v5"></path></svg><span>Supprimer</span></a>
+<a href="Main.dc.html" aria-label="Fermer" style="position: absolute; right: -10px; top: 0; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; color: #1F3A2B">
+<svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+</a>
+</div>
+<div class="defile" style="flex: 1 1 0; min-height: 0; overflow-y: auto; box-sizing: border-box; padding: 4px 20px 26px; display: flex; flex-direction: column; gap: 14px; -webkit-mask-image: linear-gradient(180deg, #000 0, #000 calc(100% - 22px), rgba(0, 0, 0, 0) 100%); mask-image: linear-gradient(180deg, #000 0, #000 calc(100% - 22px), rgba(0, 0, 0, 0) 100%)">
+<h1 style="margin: 0; font-family: 'Space Grotesk', system-ui, sans-serif; font-size: 22px; line-height: 28px; font-weight: 700; letter-spacing: -0.3px">Fiche produit</h1>
+<div style="position: relative; height: 150px; border-radius: 16px; background: #D9EBDA; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px">
+<svg aria-hidden="true" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#4A6553" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="14" rx="2"></rect><path d="M4 16l4.5-4.5 3.5 3.5 2.5-2.5L20 17"></path></svg>
+<div style="font-size: 13px; color: #4A6553">Photo du produit</div>
+<button type="button" style="position: absolute; right: 10px; bottom: 10px; height: 44px; padding: 0 14px; border: 0; border-radius: 22px; background: #FBFDFA; color: #1F3A2B; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(31, 58, 43, 0.16)"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l1.5-2.5h7L17 8h3v11H4z"></path><circle cx="12" cy="13" r="3.5"></circle></svg><span>Changer la photo</span></button>
+</div>
+<div style="display: flex">
+<div style="flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 6px">
+<label for="nom" style="font-size: 13px; line-height: 20px; font-weight: 600">Nom du produit</label>
+<input id="nom" type="text" value="{{nom}}" onChange="{{set_nom}}" placeholder="Ce qui est écrit sur l'emballage" style="height: 48px; box-sizing: border-box; width: 100%; padding: 0 14px; border: 1px solid #B5CFB8; border-radius: 12px; background: #FBFDFA; font-family: inherit; font-size: 15px; color: #1F3A2B">
+</div>
+</div>
+<div style="display: flex; gap: 8px">
+<div style="flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 6px">
+<label for="marque" style="font-size: 13px; line-height: 20px; font-weight: 600">Marque</label>
+<input id="marque" type="text" value="{{marque}}" onChange="{{set_marque}}" placeholder="Marque" style="height: 48px; box-sizing: border-box; width: 100%; padding: 0 14px; border: 1px solid #B5CFB8; border-radius: 12px; background: #FBFDFA; font-family: inherit; font-size: 15px; color: #1F3A2B">
+</div>
+<div style="flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 6px">
+<label for="categorie" style="font-size: 13px; line-height: 20px; font-weight: 600">Catégorie</label>
+<input id="categorie" type="text" value="{{categorie}}" onChange="{{set_categorie}}" placeholder="Facultatif" style="height: 48px; box-sizing: border-box; width: 100%; padding: 0 14px; border: 1px solid #B5CFB8; border-radius: 12px; background: #FBFDFA; font-family: inherit; font-size: 15px; color: #1F3A2B">
+</div>
+</div>
+<div role="group" aria-label="Notre note" style="display: flex; flex-direction: column; gap: 8px">
+<div style="font-size: 13px; line-height: 20px; font-weight: 600">Notre note</div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+<button type="button" aria-pressed="{{pasOn}}" onClick="{{pickPas}}" class="{{pasClass}}" style="height: 68px; border-radius: 12px; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px">
+<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+<span>Pas bon</span>
+</button>
+<button type="button" aria-pressed="{{bonOn}}" onClick="{{pickBon}}" class="{{bonClass}}" style="height: 68px; border-radius: 12px; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px">
+<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+<span>Bon</span>
+</button>
+<button type="button" aria-pressed="{{superOn}}" onClick="{{pickSuper}}" class="{{superClass}}" style="height: 68px; border-radius: 12px; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px">
+<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l2.6 5.3 5.9.9-4.2 4.1 1 5.8L12 16.9 6.7 19.6l1-5.8L3.5 9.7l5.9-.9z"></path></svg>
+<span>Super</span>
+</button>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="avis" style="font-size: 13px; line-height: 20px; font-weight: 600">Notre avis</label>
+<textarea id="avis" value="{{avis}}" onChange="{{set_avis}}" placeholder="Goût, texture, à racheter ou non…" style="height: 84px; box-sizing: border-box; padding: 12px 14px; border: 1px solid #B5CFB8; border-radius: 12px; background: #FBFDFA; font-family: inherit; font-size: 15px; line-height: 20px; color: #1F3A2B; resize: none"></textarea>
+</div>
+<div style="display: flex">
+<div style="flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 6px">
+<label for="magasin" style="font-size: 13px; line-height: 20px; font-weight: 600">Acheté chez</label>
+<input id="magasin" type="text" value="{{magasin}}" onChange="{{set_magasin}}" placeholder="Magasin ou site" style="height: 48px; box-sizing: border-box; width: 100%; padding: 0 14px; border: 1px solid #B5CFB8; border-radius: 12px; background: #FBFDFA; font-family: inherit; font-size: 15px; color: #1F3A2B">
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<div style="font-size: 13px; line-height: 20px; font-weight: 600">Utilisé dans nos recettes</div>
+<a href="Recette.dc.html" style="display: flex; align-items: center; gap: 12px; min-height: 56px; box-sizing: border-box; padding: 8px 12px; border: 1px solid #B5CFB8; border-radius: 12px; background: #FBFDFA; text-decoration: none; color: #1F3A2B">
+<div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px">
+<div style="font-size: 15px; line-height: 20px; font-weight: 600">Burgers maison, sauce au poivre</div>
+<div style="font-size: 13px; line-height: 18px; color: #4A6553">Adaptée · recette traditionnelle</div>
+</div>
+<div role="img" aria-label="Bon" style="flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 16px; background: #D9EFC4; color: #1F3A2B"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></div>
+</a>
+<button type="button" style="align-self: flex-start; height: 44px; padding: 0 16px; border: 0; border-radius: 22px; background: rgba(31, 58, 43, 0.07); color: #1F3A2B; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"></path><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"></path></svg><span>Lier une recette</span></button>
+</div>
+</div>
+<div style="flex-shrink: 0; padding: 8px 20px 34px">
+<a href="Main.dc.html" style="display: flex; align-items: center; justify-content: center; height: 52px; border-radius: 12px; background: #EE9048; color: #1F3A2B; text-decoration: none; font-size: 16px; font-weight: 600">Enregistrer</a>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const d = {"nom": "Steak végétal au poivre", "marque": "Les Prés Verts", "categorie": "Simili-carné", "magasin": "", "avis": "Bon goût poivré, tient bien à la poêle. À racheter."};
+    const v = (k) => (s[k] === undefined ? d[k] : s[k]);
+    const set = (k) => (e) => this.setState({ [k]: e.target.value });
+    const note = s.note === undefined ? 'super' : s.note;
+    const pick = (n) => () => this.setState({ note: note === n ? '' : n });
+    const out = {
+      superOn: note === 'super', bonOn: note === 'bon', pasOn: note === 'pas',
+      pasClass: 'note n-pas' + (note === 'pas' ? ' on' : ''), bonClass: 'note n-bon' + (note === 'bon' ? ' on' : ''), superClass: 'note n-super' + (note === 'super' ? ' on' : ''),
+      pickSuper: pick('super'), pickBon: pick('bon'), pickPas: pick('pas')
+    };
+    out['nom'] = v('nom'); out['set_nom'] = set('nom');
+    out['marque'] = v('marque'); out['set_marque'] = set('marque');
+    out['categorie'] = v('categorie'); out['set_categorie'] = set('categorie');
+    out['magasin'] = v('magasin'); out['set_magasin'] = set('magasin');
+    out['avis'] = v('avis'); out['set_avis'] = set('avis');
+    return out;
+  }
+}
+</script>
+</body>
+</html>

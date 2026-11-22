@@ -1,0 +1,54 @@
+# Dépôt public : aucun secret, aucune donnée personnelle (docs/cadrage.md, « Secrets et dépôt public »).
+
+# Secrets Cloudflare et variables locales
+# Source : cloudflare/workers-sdk, packages/create-cloudflare/templates/hello-world-durable-object/js/.gitignore
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example
+.wrangler/
+node_modules/
+
+# Clés de signature (elles vont dans les secrets GitHub, docs/cadrage.md)
+*.jks
+*.keystore
+*.p8
+*.p12
+*.mobileprovision
+google-services.json
+GoogleService-Info.plist
+
+# Gradle, Kotlin, Android
+# Source : github/gitignore, Gradle.gitignore, Kotlin.gitignore, Android.gitignore (commit eeb775f7cbd2)
+.gradle/
+**/build/
+!**/src/**/build/
+!gradle-wrapper.jar
+!gradle-wrapper.properties
+.kotlin/
+local.properties
+captures/
+.externalNativeBuild/
+.cxx/
+*.aab
+*.apk
+output-metadata.json
+*.iml
+.idea/
+*.hprof
+hs_err_pid*
+replay_pid*
+*.log
+
+# Xcode, Swift
+# Source : github/gitignore, Swift.gitignore (même commit)
+xcuserdata/
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+.build/
+
+# Système
+.DS_Store
+Thumbs.db
