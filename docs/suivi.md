@@ -32,7 +32,7 @@ Dernière mise à jour : 2026-11-22
   - Hors réseau : le scan est gardé en « À noter » avec son code-barres et un rappel, puis prérempli au retour du réseau.
   - Code inconnu d'Open Food Facts : l'écran Erreur s'affiche, sans la phrase sur la connexion. « Saisir le produit à la main » y garde le code-barres.
 - 2026-11-22 : écart 3 tranché et décision de phase 1 révisée (preuve : ta question sur les stores, puis ta réponse « Porte ouverte »). Un seul avis commun par carnet, comme la maquette ; « Nos ajustements » reste commun. Multi-utilisateur en « porte ouverte » : la V1 reste à deux, mais les données sont rangées par carnet avec ses membres et l'authentification passe par une interface remplaçable. Mise à jour faite dans docs/cadrage.md (décisions de validation).
-- 2026-11-22 : écart 4 tranché (preuve : ta réponse « Produits seulement »). Filtre « À noter » (icône horloge) ajouté aux produits seulement. Une recette s'enregistre toujours avec une note, sans note présélectionnée. Exception à reporter dans le design system (README:58).
+- 2026-11-22 : écart 4 tranché (preuve : ta réponse « Produits seulement »). Filtre « À noter » (icône horloge) ajouté aux produits seulement. Une recette s'enregistre toujours avec une note, sans note présélectionnée. Exception à reporter dans le design system (reportée à la tâche 2c : docs/design/README.md:67).
 - 2026-11-22 : écart 5 tranché (preuve : ta réponse « Seulement sans note »). Le bloc de rappel s'affiche tant qu'aucune note n'est choisie, au scan comme à la création à la main. Aucun délai n'est présélectionné. L'autorisation est demandée au premier choix. Le rappel est annulé dès que le produit est noté.
 - 2026-11-22 : écart 6 tranché (preuve : ta réponse « Je la propose »). Je propose une palette sombre dérivée des tokens, avec les contrastes calculés et WCAG AA pour cible. Tu la valides sur un aperçu ; ensuite je l'ajoute au design system.
 - 2026-11-22 : écart 7 tranché (preuve : ta réponse « Pas en V1 »). Sur tablette, la V1 affiche l'interface du téléphone, étirée ; la disposition liste/détail passe en V2 (Parking). Contrainte qui reste : sur Android, avec la cible API 36, les restrictions d'orientation sont ignorées sur les grands écrans (docs/cadrage.md:45). L'interface étirée doit donc fonctionner aussi en paysage.
@@ -43,8 +43,8 @@ Dernière mise à jour : 2026-11-22
 - 2026-11-22 : écart 12 tranché (preuve : ta réponse « Les quatre »).
   - « Annuler » ramène d'où l'on vient : à la liste après un glissement, à la fiche sinon.
   - La boîte de confirmation nomme l'élément réellement visé.
-  - Le glissement pour supprimer marche aussi sur les recettes (docs/design/README.md:50).
-  - Chaque élément actif a un focus visible, avec le style des champs actifs (docs/design/README.md:16). À ajouter au design system.
+  - Le glissement pour supprimer marche aussi sur les recettes (docs/design/README.md:59).
+  - Chaque élément actif a un focus visible, avec le style des champs actifs (docs/design/README.md:16 dans le commit 116b417). Ajouté au design system à la tâche 2c, puis remplacé par le contour détaché (docs/design/README.md:17).
 - 2026-11-22 : **tâche 1 close** : maquettes et design system lus en entier, 12 écrans inventoriés, 12 écarts tranchés avec toi un par un. Preuve : docs/inventaire-ecrans.md (relu par le sous-agent) et les entrées « écart 1 » à « écart 12 » ci-dessus.
 - 2026-11-22 : contre-revue par un autre modèle décidée (preuve : ta réponse « cadrage.md + table dorée »). Les deux relectures déjà faites tournaient sur le même modèle que moi (Opus 5.5, `model: None` dans le journal de session). Fable relit docs/cadrage.md maintenant, puis la table dorée ; l'inventaire n'est pas relu une deuxième fois.
 - 2026-11-22 : **contre-revue Fable de docs/cadrage.md faite**. Pas d'erreur grave ni d'obstacle aux trois contraintes. 24 corrections appliquées, chacune après relecture de sa preuve dans la page téléchargée ou par une commande (`curl` sur l'API GitHub, npm, Couchbase) :
@@ -71,9 +71,20 @@ Dernière mise à jour : 2026-11-22
   - Exclusions testées avec `git check-ignore` ; recherche d'adresses e-mail, de jetons et de chemins personnels dans docs/ : rien trouvé.
 - 2026-11-22 : **tâche 2c close** : décisions des écarts et thème sombre reportés dans docs/design/README.md et docs/design/tokens.json (preuve : diff du commit « Tâche 2c : décisions des écarts et thème sombre dans le design system »).
   - Relecture par le sous-agent : 9 corrections (C1 à C9) et 6 points à discuter (D1 à D6). J'ai relu chaque preuve citée dans les maquettes avant de corriger. Les points antérieurs à 2c (D5) passent en « À trancher ».
-  - Seconde relecture : 9 corrections et 8 points à discuter, preuves relues dans les maquettes et recalculées. Tout est appliqué, sauf la mise à jour des renvois de ligne dans l'historique de ce fichier, qui désignent la version du commit 116b417.
+  - Seconde relecture : 9 corrections et 8 points à discuter, preuves relues dans les maquettes et recalculées. Tout est appliqué.
   - Focus : la géométrie validée plus tôt (contour collé + halo `menthe`) ne tenait pas. Le halo touchait le fond à 1,51:1 en clair, et le contour se confondait en sombre avec les éléments vifs (1,03:1 sur `menthe`). Elle est remplacée par un contour de 2 px `encre-douce`, détaché de l'élément par 2 px, sans halo (preuve : ta réponse « Contour détaché, sans halo »). Minimum 3,6:1 sur 13 fonds, dans les deux thèmes ; seul l'encart du scan, en sombre à 55 %, descend à 2,4:1 (point 17).
   - docs/design/contrastes.md régénéré : 55 paires, avec les mesures du nouveau focus et de l'encart du scan. Règle relue dans WCAG, Understanding 1.4.11, section « Relationship with Focus Visible ».
+- 2026-11-22 : renvois de ligne corrigés (preuve : ta demande « corrige les renvois de ligne »). Ce fichier pointe vers la version actuelle de docs/design/README.md. docs/inventaire-ecrans.md garde ses renvois, qui citent des passages réécrits depuis, et précise la version qu'ils désignent.
+- 2026-11-22 : deux corrections reportées au moment où l'application tournera (preuve : ta réponse « je corrigerai le focus quand je ferai tourner l'app, idem pour le contour bordure ») : le focus du lien ODbL dans l'encart du scan (point 17) et le contraste du contour `bordure` (point 13).
+- 2026-11-22 : point 18 tranché : `radius-pill` devient l'arrondi complet, rayon égal à la moitié de la hauteur, pour tous les éléments ronds, bouton Ajouter compris ; pas de token propre à Ajouter (preuve : ta réponse « Arrondi complet »). Reporté dans docs/design/README.md (Espacements et rayons) et docs/design/tokens.json.
+- 2026-11-22 : point 17 tranché : en sombre, l'encart du scan passe à `menthe` 22 % avec un texte `encre` ; en clair, rien ne change (preuve : ta réponse « 22 %, texte encre »). Texte 8,62:1, focus du lien ODbL 5,26:1. Nouvelle opacité `encart-scan` dans docs/design/tokens.json ; exception écrite dans docs/design/README.md ; docs/design/contrastes.md mis à jour, plus aucun échec connu en sombre.
+- 2026-11-22 : point 19 tranché, le README suit les maquettes, rien ne change à l'écran ; reporté dans docs/design/README.md et docs/design/tokens.json :
+  - `note-super` trace aussi les cadres de capture, caméra et zone photo (preuve : ta réponse « Suivre les maquettes ») ;
+  - `menthe` marque l'élément sélectionné et l'action principale d'un choix ; les actions secondaires sont à fond `repos` (preuve : ta réponse « Corriger le README ») ;
+  - `encre-douce` est permis sur tout fond mesuré à 4,5:1 ou plus ; les halos potiron et violet restent au point 15 (preuve : ta réponse « Élargir la règle »).
+- 2026-11-22 : point 20 tranché, reporté dans docs/design/README.md (Focus) :
+  - recherche : le focus entoure le `label`, qui dessine le cadre du champ ; conséquence directe de la règle, annoncée sans question ;
+  - « Supprimer » révélé au glissement : contour intérieur de 2 px en `surface` sur `danger`, 6,06:1 en clair et 6,69:1 en sombre, seule exception au contour détaché (preuve : ta réponse « Contour intérieur »).
 
 ## À trancher
 
@@ -92,7 +103,7 @@ Dernière mise à jour : 2026-11-22
 12. ~~points mineurs~~ : tranché, voir Fait.
 
 Relevé à la tâche 2b, à trancher avant les tests d'accessibilité (docs/design/contrastes.md, thème clair) :
-13. contour des champs `bordure` sur `surface` : 1,63:1 pour 3:1 exigé ;
+13. contour des champs `bordure` sur `surface` : 1,63:1 pour 3:1 exigé. Reporté au moment où l'application tournera ;
 14. pastille choisie contre pastille au repos : 1,38:1. Le libellé change de couleur, pas de graisse (Main.dc.html:27) : cela suffit-il ?
 15. texte secondaire au cœur des halos : potiron 4,35:1, violet 3,63:1 pour 4,5:1 exigé.
 
@@ -103,16 +114,20 @@ Relevé à la tâche 2c :
     - poignée, `encre` à 22 % (Produit.dc.html:38) ;
     - ombre de « Changer la photo », 16 % (Produit.dc.html:49) ;
     - ombre de la boîte de confirmation, 28 % (ConfirmProduit.dc.html:23).
-17. encart `menthe` du scan en sombre (ScanInconnu.dc.html:45).
+17. ~~encart `menthe` du scan en sombre (ScanInconnu.dc.html:45)~~ : tranché, voir Fait. Reste à remesurer sous le halo dans l'application.
     - À 55 %, le texte n'atteint que 3,61:1 en `encre-sur-couleur` et 3,97:1 en `encre`, et le focus du lien ODbL 2,43:1.
     - À 22 %, comme le halo, `encre` donne 8,62:1 et le focus 5,26:1 ; mais le texte doit alors passer en `encre` (`encre-sur-couleur` : 1,66:1), exception au README.
+    - Le focus du lien ODbL est reporté au moment où l'application tournera ; il dépend de l'opacité choisie ici.
     - Ces mesures prennent `fond-haut` nu ; dans la maquette, l'encart est aussi sous le halo `menthe` de la feuille (ScanInconnu.dc.html:36). À remesurer une fois la valeur choisie.
-18. rayon des pastilles : `radius-pill` vaut 24 px, mais les maquettes dessinent 22 px (Produit.dc.html:103, Creation.dc.html:49). Le token est aussi donné pour le bouton Ajouter, qui est un cercle de rayon 30 px (Main.dc.html:98).
-19. points antérieurs relevés à la relecture 2c :
+18. ~~rayon des éléments ronds~~ : tranché, voir Fait. Restent trois rayons des maquettes sans token juste :
+    - boîte de confirmation, 24 px (ConfirmProduit.dc.html:23) ;
+    - haut des feuilles, 28 px (Produit.dc.html:36, Creation.dc.html:36, Recette.dc.html:36, ScanInconnu.dc.html:36) ;
+    - vignettes des lignes de liste, 10 px (Main.dc.html:57, ListeGlisser.dc.html:64, ScanConnu.dc.html:30), alors que `radius-md` (12 px) est donné pour les vignettes.
+19. ~~points antérieurs relevés à la relecture 2c~~ : tranché, voir Fait.
     - `note-super` est employé hors des notes : contour de 2 px (Scan.dc.html:35, ScanConnu.dc.html:24), pointillés de la zone photo ;
     - `menthe` est dit marquer les « actions secondaires » ;
     - `encre-douce` est employé au-delà de `fond`, `surface` et `vignette` (pistes, halos, capsules ; contrastes.md).
-20. focus, deux cas d'implémentation : la recherche n'a pas de contour propre (`outline: 0`, Main.dc.html:42), le focus doit être porté par le `label` qui l'englobe (Main.dc.html:39) ; l'action « Supprimer » révélée au glissement touche le bord de l'écran (ListeGlisser.dc.html:61), son contour détaché serait rogné.
+20. ~~focus, deux cas d'implémentation~~ : tranché, voir Fait. Rappel : la recherche n'a pas de contour propre (`outline: 0`, Main.dc.html:42), le focus doit être porté par le `label` qui l'englobe (Main.dc.html:39) ; l'action « Supprimer » révélée au glissement touche le bord de l'écran (ListeGlisser.dc.html:61), son contour détaché serait rogné.
 
 ## Parking
 

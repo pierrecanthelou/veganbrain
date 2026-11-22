@@ -5,6 +5,7 @@ Dernière mise à jour : 2026-11-22. Relu par le sous-agent relecteur ; ses corr
 Sources :
 - maquettes : artifact Design https://claude.ai/artifact/JwYfF1ykTi6mgnT9gJRC3g, copie locale dans `docs/maquettes/` (index `canvas.json`, un fichier `.dc.html` par écran de 390 × 844) ;
 - design system « Carnet vegan » : artifact https://claude.ai/artifact/PYW9YG1w1FCwhYomsFtSXW, version 1795333659-1878, copie dans `docs/design/` (`tokens.json` sha256 6281bf84…, `README.md` sha256 fb0b5016…).
+- renvois de ligne : `docs/design/README.md:n` désigne la version du commit 116b417 (sha256 fb0b5016) ; plusieurs passages cités ont été réécrits à la tâche 2c. `docs/design/tokens.json:38` désigne la copie d'origine (sha256 6281bf84), qui n'a jamais été commitée : dans le commit 116b417, l'usage de `filigrane` est à la ligne 46.
 
 J'ai aussi lu dans l'artifact `design-system.json`, `assets/Filigranes/README.md` et `components/Cover/preview.html`, sans les copier : ils n'ajoutent aucune règle d'écran. Les filigranes sont « conservés ici mais plus utilisés sur les écrans pour l'instant » (`assets/Filigranes/README.md` de l'artifact), ce que confirment `docs/design/README.md:28` et `docs/design/tokens.json:38`.
 

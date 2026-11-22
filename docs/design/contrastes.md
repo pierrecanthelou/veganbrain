@@ -53,8 +53,7 @@ Calculés le 2026-11-22 à partir de `tokens.json` (version 2). Ils sont à refa
 | Texte (1.4.3) | danger | surface (et surface sur danger) | 4,5:1 | 6,06 | 6,69 |
 | Texte (1.4.3) | danger | fond-haut | 4,5:1 | 5,72 | 7,29 |
 | Texte (1.4.3) | danger | danger-clair | 4,5:1 | 4,81 | 6,17 |
-| Texte (1.4.3) | encre-sur-couleur | encart menthe à 55 % du scan, sur fond-haut (valeur sombre à trancher) | 4,5:1 | 9,15 | **3,61 ✗** |
-| Texte (1.4.3) | encre | encart menthe à 55 % du scan, sur fond-haut (valeur sombre à trancher) | 4,5:1 | 9,15 | **3,97 ✗** |
+| Texte (1.4.3) | encre-sur-couleur en clair, encre en sombre | encart du scan (`encart-scan` : menthe à 55 % en clair, 22 % en sombre), sur fond-haut | 4,5:1 | 9,15 | 8,62 |
 | Contour ou état (1.4.11) | note-super (ancien contour du champ actif) | surface | 3:1 | **1,99 ✗** | 6,83 |
 | Contour ou état (1.4.11) | menthe (ancien halo du champ actif) | fond-haut | 3:1 | **1,51 ✗** | 8,29 |
 | Contour ou état (1.4.11) | menthe (ancien halo du champ actif) | fond-bas | 3:1 | **1,40 ✗** | 9,17 |
@@ -76,15 +75,17 @@ Calculés le 2026-11-22 à partir de `tokens.json` (version 2). Ils sont à refa
 | Retenu (focus) | encre-douce (contour de focus détaché, 2 px) | capsule potiron-clair | 3:1 | 4,56 | 6,41 |
 | Retenu (focus) | encre-douce (contour de focus détaché, 2 px) | capsule violette-clair | 3:1 | 4,77 | 7,46 |
 | Retenu (focus) | encre-douce (contour de focus détaché, 2 px) | vignette | 3:1 | 5,14 | 6,14 |
-| Retenu (focus) | encre-douce (contour de focus détaché, 2 px) | encart menthe à 55 % du scan, sur fond-haut (valeur sombre à trancher) | 3:1 | 4,74 | **2,43 ✗** |
+| Retenu (focus) | encre-douce (contour de focus détaché, 2 px) | encart du scan (`encart-scan` : menthe à 55 % en clair, 22 % en sombre), sur fond-haut | 3:1 | 4,74 | 5,26 |
 
 ## Décisions du 2026-11-22
 
 - **Contour de focus.**
   - Contour de 2 px en `encre-douce`, détaché de l'élément par 2 px, sans halo, dans les deux thèmes, pour le focus comme pour le champ en saisie.
-  - Minimum mesuré, hors encart du scan : 3,6287:1, soit au moins 3,6:1. Voir les lignes « Retenu (focus) ».
-  - Sur l'encart du scan en sombre, s'il garde 55 % : 2,43:1 (`docs/suivi.md`, point 17).
+  - Minimum mesuré : 3,6287:1, soit au moins 3,6:1. Voir les lignes « Retenu (focus) ».
   - Il remplace deux versions écartées. D'abord le contour fin `note-super` avec halo `menthe` : 1,99:1 sur `surface` en clair, halo contre fond 1,51:1. Ensuite le contour collé à l'élément avec halo `menthe` à l'extérieur, validé un temps : le halo touchait le fond à 1,51:1 en clair, et le contour se confondait en sombre avec les éléments vifs (1,03:1 sur `menthe`, 1,17:1 sur `danger`).
+- **Encart du scan.**
+  - En sombre, `menthe` à 22 % avec un texte `encre`, au lieu de 55 % avec `encre-sur-couleur` (3,61:1 pour le texte, 2,43:1 pour le focus du lien ODbL). Texte 8,62:1, focus 5,26:1.
+  - Mesuré sur `fond-haut` nu ; dans la maquette, l'encart est aussi sous le halo `menthe` de la feuille (ScanInconnu.dc.html:36). À remesurer dans l'application.
 - **Boîte de confirmation.**
   - En sombre, contour `bordure` de 1 px, parce que l'ombre ne se voit plus sur le voile.
   - Voir les lignes « Repère visuel ».
@@ -98,7 +99,4 @@ Thème clair :
 - Texte secondaire au cœur des halos : potiron 4,35:1, violet 3,63:1.
 - Boîte contre voile : 2,69:1, avec une ombre. Ce point n'est pas exigé par WCAG.
 
-Thème sombre :
-
-- Texte de l'encart du scan si l'encart garde 55 % : 3,61:1 en `encre-sur-couleur`, 3,97:1 en `encre`.
-- Focus du lien ODbL dans l'encart du scan si l'encart garde 55 % : 2,43:1.
+Thème sombre : aucun.
