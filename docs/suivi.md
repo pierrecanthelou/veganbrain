@@ -1,14 +1,13 @@
 # Suivi du travail
 
-Dernière mise à jour : 2026-11-22
+Dernière mise à jour : 2026-11-26
 
 ## En cours
 
-- 4. Arcmutate et Pitest : à démarrer sur ton feu vert.
+- 4. Licence Arcmutate et spike Pitest + Arcmutate sur la cible JVM du module partagé (commencée le 2026-11-26). Étape A (Pitest seul) faite ; étape B (Arcmutate) attend la licence open source, que tu demandes à support@arcmutate.com.
 
 ## À faire
 
-4. Licence Arcmutate open source demandée et essai de branchement Pitest + Arcmutate sur la cible JVM du module partagé (spike).
 5. Tarifs des comptes Apple Developer et Google Play Console sourcés (doc officielle).
 6. Suite de la phase 2 (tests unitaires, mutation, E2E Maestro, CI, accessibilité) : découpée en tâches une fois la table dorée écrite.
 7. Créer l'adresse de contact dédiée au User-Agent OFF (par toi, hors dépôt), avant le premier appel à OFF (docs/criteres.md, OFF-02).
@@ -90,6 +89,8 @@ Dernière mise à jour : 2026-11-22
   - relecture par le sous-agent habituel, puis contre-relecture Fable ; corrections appliquées après relecture de leurs preuves ; diff des corrections relu une troisième fois ;
   - les « choix annoncés » de la table sont des choix réversibles faits sans question, à contester si besoin ;
   - Q-3 affine le « pas de redistribution » de docs/cadrage.md:283 : l'image d'OFF est copiée dans R2, pour les seuls membres du carnet, avec sa mention CC BY-SA (OFF-05).
+
+- 2026-11-26 : **tâche 4, étape A** : Pitest 1.30.2 tourne sur la cible `jvm()` d'un module KMP (Kotlin 2.4.21, Gradle 9.7.0), tests `kotlin.test` dans `commonTest`, par une tâche Gradle maison (`spikes/mutation-kmp/build.gradle.kts`). Preuve : `./gradlew pitest` → « Generated 38 mutations Killed 32 (84%) », dont 5 des 6 mutants non tués en code généré (coroutine, `!!`, accesseur) ; README relu par le sous-agent relecteur, ses 7 constats appliqués après vérification de leurs preuves ; `./gradlew pitest -Parcmutate` → « No licence found ». Détail : `spikes/mutation-kmp/README.md`.
 
 ## À trancher
 

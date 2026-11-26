@@ -399,12 +399,12 @@ Vouloir que le rappel arrive aussi chez l'autre personne. Il faudrait alors FCM 
 
 | Option | Pour | Contre |
 |---|---|---|
-| **Pitest + Arcmutate, cible JVM** | Seul chemin documenté pour Kotlin (« via the Arcmutate kotlin plugin ») | Payant. La page d'accueil affiche 8 $ et 12 $/utilisateur/mois, la page d'abonnement 13 $/mois : les deux pages se contredisent. Gratuit seulement en open source ou en évaluation. Le plugin Gradle pitest ne supporte pas KMP (ticket #234 ouvert depuis 2020) : il faudra une tâche Gradle maison. |
+| **Pitest + Arcmutate, cible JVM** | Seul chemin documenté pour Kotlin (« via the Arcmutate kotlin plugin ») | Payant : la page d'accueil, relue le 2026-11-26, affiche Base à 8 $ et Pro à 12 $/utilisateur/mois ; les 13 $/mois de la page d'abonnement n'ont pas été relus (page rendue en JavaScript). Gratuit en open source (« We provide free licenses for open-source projects. Contact us to learn more. », https://www.arcmutate.com/, relu le 2026-11-26 ; contact support@arcmutate.com, https://docs.arcmutate.com/licence.html) ou en évaluation (https://subscribe.arcmutate.com/trial, durée non vérifiée). Le plugin Gradle pitest ne supporte pas KMP (ticket #234 ouvert depuis 2020) : il faudra une tâche Gradle maison. |
 | Pitest seul, cible JVM | Gratuit | Pitest mute le bytecode JVM. La qualité des mutants sur du Kotlin sans Arcmutate n'est pas documentée. |
 | kaputt (mutants en IR Kotlin) | « Verified … against jvm, iosSimulatorArm64 » | Projet d'août 2026, une étoile, un seul auteur |
 
 **Recommandation** :
-- Pitest + Arcmutate sur la cible JVM du module partagé, précédé en phase 2 d'un **spike** qui vérifie le branchement sur KMP. Repli si le spike échoue : Pitest seul sur un module JVM extrait du domaine pur.
+- Pitest + Arcmutate sur la cible JVM du module partagé, précédé en phase 2 d'un **spike** qui vérifie le branchement sur KMP. Spike du 2026-11-26 : Pitest seul fonctionne sur la cible `jvm()` d'un module KMP par une tâche Gradle maison ; Arcmutate attend sa licence (`spikes/mutation-kmp/README.md`). Repli si le spike échoue : Pitest seul sur un module JVM extrait du domaine pur.
 - **Seuil** proposé, sans recommandation officielle trouvée : 70 % au départ sur le domaine (règles de la table dorée, fusion de synchro), relevé à 80 % une fois stable.
 - **Fréquence** : nuit et avant chaque version, pas sur chaque PR. L'analyse incrémentale fait partie de l'offre Arcmutate Pro à 12 $ (« Git integration, incremental analysis », https://www.arcmutate.com/). Non vérifié : si la licence open source l'inclut, et ce que fait Pitest seul.
 
