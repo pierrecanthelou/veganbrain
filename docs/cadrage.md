@@ -125,7 +125,7 @@ Lecture des photos : `GET` via le Worker avec le même jeton (§ authentificatio
 |---|---|---|---|---|---|
 | a. Jeton de service Access | En-têtes `CF-Access-Client-Id/Secret` | Non : la page les destine aux systèmes automatisés (« You can provide automated systems with service tokens »). Un seul secret, intégré à l'app. | Zero Trust : gratuit jusqu'à 50 utilisateurs selon une architecture de référence seulement (incertain) | Une organisation Zero Trust | https://developers.cloudflare.com/cloudflare-one/access-controls/service-credentials/service-tokens/ |
 | b. Access Managed OAuth | « The end user authenticates with their identity provider, and the client receives an OAuth access token » | Oui | Idem a | Organisation Zero Trust. Non documenté pour une app mobile : les clients cités sont « CLIs, AI agents, SDKs, and scripts ». | https://developers.cloudflare.com/changelog/post/2026-03-20-managed-oauth/ |
-| c. Sign in with Apple / Google | Le Worker vérifie l'ID token (bibliothèque `jose`, JWKS) | Oui | Compte Apple Developer (coût à sourcer) ; Google : à sourcer | Configuration chez Apple et Google. Cloudflare ne documente le motif `jose` + JWKS que pour Access, pas pour Apple ni Google. | https://developers.cloudflare.com/cloudflare-one/access-controls/applications/http-apps/authorization-cookie/validating-json/ |
+| c. Sign in with Apple / Google | Le Worker vérifie l'ID token (bibliothèque `jose`, JWKS) | Oui | Aucun coût propre : les comptes Apple Developer et Play Console sont déjà nécessaires à la distribution (tarifs : Exigences transverses, ligne Distribution) | Configuration chez Apple et Google. Cloudflare ne documente le motif `jose` + JWKS que pour Access, pas pour Apple ni Google. | https://developers.cloudflare.com/cloudflare-one/access-controls/applications/http-apps/authorization-cookie/validating-json/ |
 | **d. Jeton par appareil** | Un jeton aléatoire par téléphone, créé une fois par script. D1 stocke seulement son empreinte. L'app l'envoie en `Authorization: Bearer`. | Oui (table `device → user`) | Rien de plus que Workers et D1 | Un script d'enrôlement et une table. Révoquer un appareil = supprimer une ligne. | Mécanismes : secrets Workers https://developers.cloudflare.com/workers/configuration/secrets/, binding de limitation de débit https://developers.cloudflare.com/workers/runtime-apis/bindings/rate-limit/. Empreinte via Web Crypto et stockage Keychain / Keystore : à sourcer. |
 
 **Recommandation : option d.** C'est le moins à opérer pour deux personnes et quatre appareils au plus. Il n'y a ni fournisseur d'identité ni organisation Zero Trust, et on sait qui a modifié quoi, ce qui sert à la synchro. Le binding de limitation de débit freine la force brute, mais « Rate limits are approximate and apply separately in each Cloudflare location ». Le compte est en Workers Paid, donc la question de sa disponibilité en Free ne se pose plus. Un jeton aléatoire de 256 bits rend de toute façon la force brute irréaliste (hypothèse).
@@ -414,9 +414,9 @@ Vouloir que le rappel arrive aussi chez l'autre personne. Il faudrait alors FCM 
 |---|---|---|
 | GitHub Actions Linux | 0,006 $/min. Gratuit en dépôt public. 12 $ inclus avec GitHub Free. | Tests partagés JVM, Android, émulateur avec KVM, Maestro Android |
 | GitHub Actions macOS | 0,062 $/min, environ 10 fois Linux. Le montant inclus est en dollars, « not a fixed number of minutes », et le macOS y puise à son tarif. Sans effet en dépôt public : « The use of standard GitHub-hosted runners is free: In public repositories ». | Tests iOS, Maestro iOS |
-| Xcode Cloud | 25 h/mois incluses avec l'Apple Developer Program | Alternative pour iOS |
+| Xcode Cloud | 25 h/mois incluses avec l'Apple Developer Program (« Membership includes 25 compute hours/month », relu le 2026-11-26) | Alternative pour iOS |
 
-Sources : https://docs.github.com/en/billing/concepts/product-billing/github-actions, https://docs.github.com/en/actions/reference/runners/github-hosted-runners, https://developer.apple.com/xcode-cloud/
+Sources : https://docs.github.com/en/billing/concepts/product-billing/github-actions, https://docs.github.com/en/actions/reference/runners/github-hosted-runners, https://developer.apple.com/xcode-cloud/, https://developer.apple.com/programs/whats-included/
 
 **Recommandation** : GitHub Actions avec Linux sur chaque PR, et macOS limité à la branche principale et à la nuit. Je passerais à Xcode Cloud si la facture macOS dépasse quelques dollars par mois.
 
@@ -436,8 +436,28 @@ Tranché le 2026-11-22 : dépôt public. La CI sur runners standard est gratuite
 | Zones réservées de l'écran | L'affichage bord à bord s'applique par défaut pour une cible Android 15, et Android 16 n'offre plus d'opt-out. Google Play exige une cible Android 16 (API 36) depuis le 31 août 2026 (https://developer.android.com/google/play/requirements/target-sdk). Le bord à bord est donc obligatoire dès la V1. Côté iOS, safe areas SwiftUI. |
 | Mode sombre | Android : `isSystemInDarkTheme()`. iOS : couleurs sémantiques (Apple : « Choose semantic colors instead of fixed color values »). À porter par les tokens du design system ⟳. |
 | Navigation typée | Android : Navigation3 1.2.2 stable. iOS : `NavigationStack` avec un chemin typé (à sourcer en phase 2). |
-| Distribution | Non traitée par le cahier des charges : Play (test interne) et TestFlight, ou installation directe. La page Play exclut de l'exigence d'API cible les « Permanently private apps that are restricted to users in a specific organization and intended for internal distribution only » ; l'applicabilité à un couple n'est pas établie. Tranché le 2026-11-22 : TestFlight et test interne Google Play (décisions en tête), donc l'exigence d'API cible Play s'applique. Coûts des comptes développeur : à sourcer (tâche 5 de docs/suivi.md). |
+| Distribution | Non traitée par le cahier des charges : Play (test interne) et TestFlight, ou installation directe. La page Play exclut de l'exigence d'API cible les « Permanently private apps that are restricted to users in a specific organization and intended for internal distribution only » ; l'applicabilité à un couple n'est pas établie. Tranché le 2026-11-22 : TestFlight et test interne Google Play (décisions en tête), donc l'exigence d'API cible Play s'applique. Coûts des comptes développeur, relevés le 2026-11-26 : voir « Comptes développeur » ci-dessous. |
 | Modèle des recettes | Champ « source » (lien Instagram, livre, adaptation) et ajustements : modèle à fixer en phase 2 avec les maquettes ⟳. |
+
+### Comptes développeur (relevés le 2026-11-26)
+
+| | Apple Developer Program | Google Play Console |
+|---|---|---|
+| Tarif | **99 USD par année d'adhésion**, récurrent : « The Apple Developer Program is 99 USD per membership year. Prices may vary by region and are listed in local currency during the enrollment process. » Aucun montant en euros publié : la page française dit « 99 USD […] prix à convertir dans la devise locale, le cas échéant » et demande « une carte de crédit acceptant les facturations en USD ». | **25 USD, une seule fois** : « There is a US$25 one-time registration fee. » |
+| Nécessaire pour notre distribution | Oui : dans le tableau des adhésions, TestFlight n'est coché que pour « Apple Developer Program member », ni pour le compte gratuit ni pour l'Enterprise Program. | Oui : le test interne passe par la Play Console. |
+| Test interne | Jusqu'à 100 testeurs internes, qui doivent être membres de l'équipe : « up to 100 members of your development team who hold the Account Holder, Admin, App Manager, Developer, or Marketing role ». L'autre personne doit donc être ajoutée à l'équipe App Store Connect avec l'un de ces rôles, ou passer par les testeurs externes (jusqu'à 10 000), pour lesquels « beta app description and beta app review information are required ». | Jusqu'à 100 testeurs : « An internal test can have up to 100 testers per app. » Aucune condition d'accès à la piste interne (« None. »). Le test fermé de 12 testeurs pendant 14 jours ne vise que l'accès à la production des comptes personnels créés après le 13 novembre 2023 : il ne s'applique pas à notre distribution. « Internal tests might not be subject to standard Play policy or security reviews. » |
+| Compte individuel | Apple Account avec double authentification ; « Your name will be displayed as the seller name of your apps on the App Store. » | Pièce d'identité et carte possibles (« Google may require a valid government ID and a credit card, both issued under your legal name ») ; un appareil Android est exigé : « personal account owners must verify access to an Android device using the Play Console mobile app before publishing apps. » |
+| Exonération | Réservée aux associations, établissements d'enseignement accrédités et entités publiques ; exige de « Not be an individual, sole proprietor, or single-person business ». Ne nous concerne pas. | Aucune trouvée. |
+
+**Total** : 124 USD la première année (99 + 25), puis 99 USD par an. Hors taxes et taux de change, qui ne sont pas publiés.
+
+Hors périmètre : la vérification des développeurs Android pour la distribution hors Play (Android Developer Console, frais annoncés de 25 USD pour le compte « Full Distribution ») ne nous concerne pas, puisque la distribution passe par Play. Information relevée par le sous-agent, non relue par moi.
+
+Sources :
+- https://developer.apple.com/programs/enroll/, https://developer.apple.com/fr/help/account/membership/program-enrollment/, https://developer.apple.com/programs/whats-included/
+- https://developer.apple.com/support/compare-memberships/ (redirige vers https://developer.apple.com/help/account/basics/about-your-developer-account), https://developer.apple.com/testflight/, https://developer.apple.com/help/account/membership/fee-waivers/
+- https://support.google.com/googleplay/android-developer/answer/6112435, https://support.google.com/googleplay/android-developer/answer/14151465, https://support.google.com/googleplay/android-developer/answer/9845334
+- https://developer.android.com/developer-verification
 
 ## États d'erreur à prévoir
 

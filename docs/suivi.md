@@ -4,11 +4,10 @@ Dernière mise à jour : 2026-11-26
 
 ## En cours
 
-- Rien. Prochaine tâche, sur ton feu vert : 5.
+- Rien. Prochaine tâche, sur ton feu vert : 6.
 
 ## À faire
 
-5. Tarifs des comptes Apple Developer et Google Play Console sourcés (doc officielle).
 6. Suite de la phase 2 (tests unitaires, mutation, E2E Maestro, CI, accessibilité) : découpée en tâches une fois la table dorée écrite.
 7. Créer l'adresse de contact dédiée au User-Agent OFF (par toi, hors dépôt), avant le premier appel à OFF (docs/criteres.md, OFF-02).
 
@@ -92,6 +91,16 @@ Dernière mise à jour : 2026-11-26
 
 - 2026-11-26 : **tâche 4, étape A** : Pitest 1.30.2 tourne sur la cible `jvm()` d'un module KMP (Kotlin 2.4.21, Gradle 9.7.0), tests `kotlin.test` dans `commonTest`, par une tâche Gradle maison (`spikes/mutation-kmp/build.gradle.kts`). Preuve : `./gradlew pitest` → « Generated 38 mutations Killed 32 (84%) », dont 5 des 6 mutants non tués en code généré (coroutine, `!!`, accesseur) ; README relu par le sous-agent relecteur, ses 7 constats appliqués après vérification de leurs preuves ; `./gradlew pitest -Parcmutate` → « No licence found ». Détail : `spikes/mutation-kmp/README.md`.
 - 2026-11-26 : **tâche 4 close** : Arcmutate écarté sur ta décision, pas de licence gratuite (preuve : ta réponse « ca va pas le faire arcmutate car il n'y a pas de licence gratuite ») ; mutation avec Pitest seul sur la cible JVM (docs/cadrage.md, section mutation). Filtre `--avoidCallsTo kotlin.jvm.internal.Intrinsics,kotlin.ResultKt` mesuré : 33 mutants au lieu de 38 ; sur les 5 écartés, un vrai mutant tué, donc filtre non activé. L'option `-Parcmutate` et la ligne `arcmutate-licence.txt` de .gitignore sont retirées.
+- 2026-11-26 : **tâche 5 close** : tarifs des comptes développeur sourcés dans docs/cadrage.md (section « Comptes développeur », sous Exigences transverses).
+  - Apple : 99 USD par année d'adhésion, récurrent ; pas de montant en euros publié.
+  - Google : 25 USD une seule fois.
+  - Total : 124 USD la première année, puis 99 USD par an.
+  - Conséquences pour la distribution :
+    - le test interne Play n'a aucune condition d'accès, et le test fermé de 12 testeurs pendant 14 jours ne vise que la production ;
+    - un compte Play personnel exige un appareil Android ;
+    - pour être testeur interne TestFlight, l'autre personne doit être membre de l'équipe App Store Connect, avec un rôle.
+  - Preuve : deux sous-agents web-fetch, puis citations revérifiées moi-même par `curl` et `grep` sur les pages Apple (enroll, page française program-enrollment, whats-included, tableau des adhésions avec la coche TestFlight, testflight, fee-waivers) et Google (6112435, 14151465, 9845334).
+  - Non relu par moi : la vérification des développeurs Android hors Play, hors périmètre, marquée comme telle.
 
 ## À trancher
 
