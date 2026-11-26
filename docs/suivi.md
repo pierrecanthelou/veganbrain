@@ -4,12 +4,61 @@ Dernière mise à jour : 2026-11-26
 
 ## En cours
 
-- Rien. Prochaine tâche, sur ton feu vert : 6.
+- Tâche 7 (adresse de contact du User-Agent OFF), en attente de toi : tu crées l'adresse et tu me dis « c'est fait », sans me la donner. Ensuite : 8.
 
 ## À faire
 
-6. Suite de la phase 2 (tests unitaires, mutation, E2E Maestro, CI, accessibilité) : découpée en tâches une fois la table dorée écrite.
-7. Créer l'adresse de contact dédiée au User-Agent OFF (par toi, hors dépôt), avant le premier appel à OFF (docs/criteres.md, OFF-02).
+7. Créer l'adresse de contact dédiée au User-Agent OFF (par toi, hors dépôt), avant le premier appel à OFF (docs/criteres.md, OFF-02). Tu la saisiras ensuite dans le script d'installation des secrets (tâche 8). Ne bloque pas la phase 2 : aucune tâche ci-dessous n'appelle OFF.
+
+Phase 2, « socle qualité, avant les fonctionnalités » (ton brief du 2026-11-22), découpée le 2026-11-26 (voir Fait).
+- Périmètre : chaque niveau de test (U, C, W, E, N, A, mutation) tourne sur un squelette, prouvé par quelques vrais critères au vert ; les choix d'outils, les spikes et les points de docs/criteres.md §14 sont tranchés. Exception : aucun critère E n'est faisable sur des onglets vides ; le niveau E n'est donc prouvé que par un flux technique en CI.
+- Les tests de chaque autre critère, dont les flux E2E des quatre parcours critiques (docs/cadrage.md:394 : scan, création, suppression avec confirmation, hors-ligne), s'écrivent avant leur code, dans la tranche de phase 3 qui les livre. Le contrat de synchro n'est écrit que pour ce dont les premiers tests C et W ont besoin.
+- Sans Mac, tout ce qui touche iOS se construit et se teste sur les runners macOS de GitHub Actions. Chaque push passe par ton feu vert : le travail iOS est regroupé en aussi peu de pushes que possible.
+- Secrets : sur ta demande du 2026-11-26 (« un script, pas une ia »), un script d'installation, lancé par toi, demande chaque secret et le range à sa place : fichier local ignoré par Git, secrets Wrangler du Worker (docs/cadrage.md:155), secrets GitHub (docs/cadrage.md:157). Aucune IA ne voit ni ne manipule un secret. Le script est créé à la tâche 8 avec le premier secret ; chaque tâche qui introduit un secret l'y ajoute, et son « Fini quand » comprend ce passage du script.
+- Ci-dessous, « point N du §14 » renvoie à docs/criteres.md section 14, « point N d'À trancher » à la section À trancher de ce fichier.
+
+8. **Squelette du module partagé et de l'app Android**, sur ce poste.
+   - Préalable : compatibilité de l'AGP, de Compose et de Navigation3 1.2.2 avec Kotlin 2.4.21 et Gradle 9.7.0, sourcée avant d'écrire le build. SKIE est vérifié : 0.10.16 apporte « Kotlin 2.4.21 support » (notes de version, https://github.com/touchlab/SKIE/releases, relues le 2026-11-26).
+   - Contenu : module KMP avec les cibles `jvm`, Android et iOS (iOS compilé en CI, tâche 12) ; couches domaine, données et présentation ; un présentateur qui expose un état et reçoit des intentions ; app Compose, bord à bord, deux onglets vides portant leur `testTag` (docs/criteres.md §13).
+   - Fini quand le test U de LIS-08 (onglet courant), écrit en commonTest (docs/criteres.md:22), passe par la tâche Gradle `jvmTest` et que l'app s'ouvre dans l'émulateur `android-36.1`. Critère : LIS-08.
+   - Script d'installation des secrets, premier secret : l'adresse de contact d'OFF-02 (tâche 7). Langage et emplacement du fichier local (`local.properties`, ignoré par `.gitignore`, ou `~/.gradle/gradle.properties`, hors du dépôt) présentés avant d'agir. Le script masque la saisie, n'affiche ni ne journalise la valeur, refuse d'écrire dans un fichier suivi par Git (`git check-ignore`), et peut être relancé sans dommage. Fini quand, lancé avec une adresse fictive en `.invalid`, il range la valeur, que `git status` reste propre et que le build la lit ; tu le lances ensuite toi-même avec la vraie adresse. Critère : OFF-02 (contact hors dépôt).
+9. **Tokens générés depuis docs/design/tokens.json**, pour Compose (Swift à la tâche 13) : aucune valeur codée en dur dans l'UI.
+   - Avant : points 16 et 18 d'À trancher (opacités sans valeur en sombre, trois rayons sans token), tranchés avec toi, une question à la fois.
+   - Fini quand un test U recalcule depuis tokens.json les paires exigées de docs/design/contrastes.md, hors des paires en attente des points 13 à 15 d'À trancher, et qu'un test Compose montre qu'en thème sombre le fond prend la valeur `sombre` de `fond`. Critères : A11-01, A11-08.
+10. **Spike Maestro, volet Android, sur ce poste.** Le README de Maestro (https://github.com/mobile-dev-inc/maestro, branche main, relu le 2026-11-26) annonce l'installation « on macOS, Linux or Windows (WSL) », et sa documentation, d'après ce README, couvre aussi une installation Windows sans WSL : laquelle marche ici est à vérifier en premier.
+    - Points à vérifier : lecture du `testTag` (docs/criteres.md:220), mode avion, boîtes d'autorisation (notifications, caméra) et moyen d'accorder la caméra d'avance pour les flux qui ouvrent le scan, caméra en émulateur (docs/cadrage.md:396), notification système touchée, rotation en paysage.
+    - Fini quand un README de spike donne pour chaque point le résultat, avec sa commande et sa sortie, que tu as choisi pour chaque ligne E concernée : Maestro, Appium, test natif ou manuel. La colonne Niveau de ces lignes, docs/criteres.md:34 et :220 sont alors mis à jour. Critères : avec une autorisation système, RAP-04, RAP-12, SCN-12 ; avec la caméra, FPR-09 ; avec une notification, RAP-07 ; en mode avion ou hors réseau, CHR-01, SCN-04, SCN-09, FPR-08 ; en paysage, A11-09.
+11. **CI Linux sur chaque PR** (GitHub Actions) : `jvmTest`, build Android, scan de secrets, puis émulateur (docs/cadrage.md:415 : « émulateur avec KVM, Maestro Android ») où tourne le flux Maestro du spike.
+    - À sourcer : l'outil de scan, les secrets d'Actions et leur comportement sur les PR venant de forks (docs/cadrage.md:157-158).
+    - Fini quand une PR montre le job vert avec les tests de LIS-08, d'A11-01 et d'A11-08 et le flux Maestro, et que l'échec du scan sur un secret de test est montré en local ou par le mécanisme de test de l'outil, jamais par un faux secret poussé dans le dépôt public. Critères : LIS-08, A11-01, A11-08.
+12. **App iOS vide, construite en CI macOS.**
+    - Choix : l'outil qui produit le projet Xcode sans Mac, à sourcer et présenté avant d'agir.
+    - Écart annoncé à docs/cadrage.md:421, qui limite macOS à main et à la nuit : on ajoute au job un déclenchement manuel, pour essayer une branche.
+    - Fini quand le job compile le module partagé pour iOS, passe `iosSimulatorArm64Test` et lance une app SwiftUI vide sur simulateur. Critère : LIS-08, dont le test U de commonTest tourne alors aussi sur iOS ; la tâche est surtout le socle des tâches 13 et 14.
+13. **Squelette iOS** : module partagé branché par SKIE, `NavigationStack` à chemin typé (à sourcer, docs/cadrage.md:438), tokens en Swift, mêmes onglets avec leur `accessibilityIdentifier`. Fini quand un test XCUITest vérifie LIS-08 dans le job macOS, et qu'un test vérifie qu'une couleur Swift générée vaut sa valeur de tokens.json. Critère : LIS-08.
+14. **Spike Maestro, volet iOS, en CI macOS** : mêmes points que la tâche 10, caméra en simulateur comprise (docs/cadrage.md:428). Fini quand le README du spike est complété pour iOS, que le flux tourne dans le job macOS, que tu as tranché les lignes E concernées et que docs/criteres.md est mis à jour comme à la tâche 10. Critères : comme la tâche 10.
+15. **Décisions d'accessibilité**, avec toi, une question à la fois : point 14 du §14 (annonce des erreurs, critères qualitatifs à mesurer) et points 14 et 15 d'À trancher (pastille choisie, halos).
+    - Fini quand ils sont tranchés, leurs lignes complétées dans docs/criteres.md, A11-01 compris pour les paires des points 14 et 15, et le test de la tâche 9 ajusté. Critères : A11-01, A11-06, A11-09, A11-10, A11-11.
+    - Restent reportés au moment où l'écran concerné tournera, sur ta décision du 2026-11-22 (voir Fait) : le point 13 d'À trancher (contour `bordure`) et le focus du lien ODbL (point 17). La remesure du texte de l'encart sous le halo (point 17) n'est pas couverte par cette décision : je te la propose avec ce report, à l'écran du scan inconnu.
+16. **Accessibilité automatisée en CI** : `enableAccessibilityChecks()` et `FontScale` sur l'émulateur du job Linux, `performAccessibilityAudit` dans le job macOS, sur les écrans du squelette.
+    - À vérifier dans la documentation : la taille de cible demandée par le vérificateur Android (A11-03 dit 44 px), la version minimale de Xcode (docs/cadrage.md:384), un moyen de forcer Dynamic Type (docs/cadrage.md:478).
+    - Défaut volontaire, posé sur une branche non fusionnée : un bouton sans nom accessible. C'est ce que LIS-02 interdit pour les pastilles.
+    - Fini quand les deux contrôles tournent en CI et attrapent ce défaut, qu'A11-03 passe au vert sur les onglets du squelette, et que les trois vérifications sont écrites dans docs/criteres.md. Critère : A11-03.
+17. **Premiers critères du domaine et mutation.**
+    - Contenu : CHR-04 (casse, accents, « œ », apostrophes) et la clé de contrôle de SCN-16 seulement, algorithme EAN-8 et EAN-13 cité depuis la documentation GS1, écrits en commençant par les tests. Les messages et le préfixe 2 (point 10 du §14) attendent la tâche 24. La tâche Pitest de `spikes/mutation-kmp/` est reprise dans le module partagé.
+    - Fini quand ces tests passent sur JVM et sur simulateur iOS, et qu'un job de nuit lance Pitest et échoue si le score de mutation du domaine passe sous 70 % (docs/cadrage.md:408 : seuil relevé à 80 % une fois stable ; :409 : fréquence, nuit et avant chaque version). Critères : CHR-04, SCN-16.
+18. **Choix du Worker** : langage du Worker et outil de test côté Worker (docs/criteres.md:23-24), sourcés et présentés avant d'agir. Le langage dit aussi si la fusion et la cascade sont écrites une ou deux fois, puisque la cascade est rejouée côté serveur (docs/cadrage.md:219). Fini quand tu as tranché et que docs/criteres.md:23-24 est complété. Critères : ceux des niveaux C et W, dont SYN-13 et SYN-14.
+19. **Squelette du Worker** : D1 en local, une route minimale, authentification par jeton d'appareil, empreinte par Web Crypto à sourcer (docs/cadrage.md:129). Fini quand le test W de SYN-14 passe en local et dans le job Linux. Critère : SYN-14.
+20. **Décisions de synchro**, avec toi, une question à la fois : points 1, 2, 7 et 12 du §14 ; purge des pierres tombales (N jours, appareil qui ne revient pas, retour après la purge : docs/cadrage.md:222) ; effacement et sauvegarde des photos R2 (docs/cadrage.md:94, :235). Fini quand chaque point est tranché et sa ligne complétée dans docs/criteres.md ou docs/cadrage.md. Critères : SYN-01, SYN-04, SYN-05, SYN-07, SYN-09, SYN-11, LIS-06, LIE-07, SCN-10, SUP-03.
+21. **Décisions d'erreurs et de serveur** : points 11 et 13 du §14, délais d'ERR-04 (point 17 du §14). Fini quand ils sont tranchés et les lignes complétées. Critères : ERR-04, SYN-13.
+22. **Premier test de convergence.** Le contrat de `/sync/push` et `/sync/pull` n'est écrit que pour ces deux tests ; le reste vient avec les tranches. Fini quand SYN-06 (deux clients simulés et le serveur) et SYN-13 passent en local et dans le job Linux. Critères : SYN-06, SYN-13.
+23. **Décisions des rappels** : points 3, 8 et 9 du §14 ; AlarmManager ou WorkManager côté Android (docs/cadrage.md:366). Fini quand ils sont tranchés et les lignes complétées. Critères : RAP-03, RAP-04, RAP-07, RAP-08, RAP-09, RAP-11, RAP-12.
+24. **Décisions du scan** : points 4 et 10 du §14. Fini quand ils sont tranchés et les lignes complétées. Critères : SCN-05, SCN-09, SCN-14, SCN-16.
+25. **Décisions des fiches et des listes** : points 5, 6, 15 et 16 du §14 ; modèle des recettes (docs/cadrage.md:440) ; feuille de choix des liens, proposée sans validation (LIE-04). Fini quand ils sont tranchés et les lignes complétées. Critères : LIE-04, RCT-03, RCT-04, LIS-01, LIS-04, LIS-05, FPR-12, SUP-04.
+26. **Textes et journal** : point 17 du §14 (textes « à fixer », format du journal d'OFF-04), plus les textes de FPR-09, FPR-11, A11-07, ERR-01 et la cible du lien de FPR-13. Je te les propose groupés. Fini quand tu les as validés, que « à fixer à l'implémentation » a disparu de leurs lignes et que le §14 est vide. Critères : LIS-04, LIS-11, RAP-07, RAP-10, RAP-12, SCN-09, SCN-16, RCT-04, FPR-09, FPR-11, FPR-13, A11-07, ERR-01, OFF-04.
+27. **Ordre des tranches de phase 3**, proposé puis validé par toi (ton brief : « Propose l'ordre »). Pas d'identifiant propre : la tâche ordonne toutes les lignes.
+    - Elle place aussi ce que la phase 2 laisse aux tranches : la tâche 7 et le nom de l'app du User-Agent (OFF-02, « à confirmer ») ; le faux serveur OFF (docs/criteres.md:34) et la correspondance d'OFF-03 ; le stockage du jeton dans Keychain et Keystore (docs/cadrage.md:129) ; l'envoi des photos, en-tête de longueur et coût CPU (docs/cadrage.md:118) ; la distribution (comptes, signature, TestFlight, test interne).
+    - Fini quand tu as validé l'ordre.
 
 ## Fait
 
@@ -101,6 +150,11 @@ Dernière mise à jour : 2026-11-26
     - pour être testeur interne TestFlight, l'autre personne doit être membre de l'équipe App Store Connect, avec un rôle.
   - Preuve : deux sous-agents web-fetch, puis citations revérifiées moi-même par `curl` et `grep` sur les pages Apple (enroll, page française program-enrollment, whats-included, tableau des adhésions avec la coche TestFlight, testflight, fee-waivers) et Google (6112435, 14151465, 9845334).
   - Non relu par moi : la vérification des développeurs Android hors Play, hors périmètre, marquée comme telle.
+- 2026-11-26 : **phase 2 découpée** en tâches 8 à 27 (voir À faire), à la place de l'ancienne tâche 6.
+  - Périmètre : ta réponse « Socle + squelette (Recommandé) ». Écart au brief, assumé : les tests de chaque critère et les flux E2E des quatre parcours critiques (docs/cadrage.md:394) arrivent avec leurs tranches de phase 3, pas en phase 2.
+  - Pas de Mac : ta réponse « Non, CI macOS seule ». Le travail iOS passe par les runners macOS de GitHub Actions.
+  - Inventaire : chaque mention « phase 2 », « à sourcer », « à fixer », « à choisir », « à vérifier », « en attente » ou « non vérifié » de docs/cadrage.md et docs/criteres.md est placée dans une tâche, d'après la relecture du 2026-11-26. Exceptions : cadrage.md:113 (limite de taille des URL présignées R2), sans objet tant que les photos passent par le Worker ; cadrage.md:402 (durée d'essai d'Arcmutate non vérifiée), sans objet depuis l'abandon d'Arcmutate (cadrage.md:407).
+- 2026-11-26 : renvois de docs/criteres.md corrigés. Vers ce fichier, ils désignent désormais l'entrée par son nom (écart, point, ligne du Parking), et non plus par son numéro de ligne, que chaque mise à jour décalait. Vers docs/cadrage.md, ceux qui dépassaient la ligne 441 sont décalés de 20 lignes, la longueur de la section ajoutée à la tâche 5.
 
 ## À trancher
 
