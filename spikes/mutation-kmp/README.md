@@ -1,6 +1,8 @@
 # Spike : mutation sur la cible JVM d'un module KMP
 
-Tâche 4 de `docs/suivi.md`. Question : Pitest, puis Arcmutate, se branchent-ils sur la cible `jvm()` d'un module Kotlin Multiplatform dont les tests sont dans `commonTest` ? Repli prévu en cas d'échec : `docs/cadrage.md:407`.
+Tâche 4 de `docs/suivi.md`. Question : Pitest, puis Arcmutate, se branchent-ils sur la cible `jvm()` d'un module Kotlin Multiplatform dont les tests sont dans `commonTest` ?
+
+**Conclusion (2026-11-26) : Pitest seul est retenu.** Il tourne sur la cible `jvm()` par une tâche Gradle maison. Arcmutate est écarté (décision de l'utilisateur du 2026-11-26 : pas de licence gratuite).
 
 ## Contenu
 
@@ -15,11 +17,11 @@ Versions : Kotlin 2.4.21, Gradle 9.7.0 (maximum « fully supported » par KGP 2.
 
 ```
 ./gradlew jvmTest          # tests
-./gradlew pitest           # étape A : Pitest seul
-./gradlew pitest -Parcmutate   # étape B : avec com.arcmutate:pitest-kotlin-plugin:1.5.2
+./gradlew pitest           # Pitest seul
+./gradlew pitest -PeviterAppels=kotlin.jvm.internal.Intrinsics,kotlin.ResultKt   # avec le filtre mesuré plus bas
 ```
 
-Rapport : `build/reports/pitest/index.html` et `mutations.xml`. L'étape B demande le fichier `arcmutate-licence.txt` « at the root of the project » (https://docs.arcmutate.com/docs/kotlin.html), ici la racine du spike, qui est le répertoire de travail de la tâche (non vérifié tant qu'aucune licence n'a tourné). Il est exclu du dépôt par `.gitignore`. La tâche vide le rapport avant chaque passage.
+Rapport : `build/reports/pitest/index.html` et `mutations.xml`. La tâche vide le rapport avant chaque passage.
 
 ## Résultats du 2026-11-26 (Windows 11, JDK 17.0.18)
 
@@ -39,11 +41,13 @@ Les 6 mutants non tués du dernier passage :
 
 À la ligne 43 de `Fusion.ficheAsync`, deux conditions sont inversées. Le test `== COROUTINE_SUSPENDED` de la machine à états (`if_acmpne` dans `javap -c`) finit en dépassement de délai, que Pitest compte comme tué : c'est un sixième mutant de code généré. Le `?:` de la même ligne est tué normalement.
 
-Cinq des six mutants non tués, et un des tués, viennent de code généré par le compilateur. Ce sont les catégories que la documentation du plugin Kotlin d'Arcmutate dit filtrer : « coroutines », « intrinsics », accesseurs générés (https://docs.arcmutate.com/docs/kotlin.html). Non vérifié tant que l'étape B n'a pas tourné.
+Cinq des six mutants non tués, et le mutant en dépassement de délai, viennent de code généré par le compilateur. D'autres mutants tués portent aussi sur du code généré : accesseurs de `Hlc` (ligne 4) et références de propriété de `compareValuesBy` (`Hlc$compareTo$1` à `$3`, ligne 7). Ce sont les catégories que la documentation du plugin Kotlin d'Arcmutate dit filtrer : « coroutines », « intrinsics », accesseurs générés (https://docs.arcmutate.com/docs/kotlin.html). Non vérifié : Arcmutate n'a pas tourné.
 
 Pitest l'écrit lui-même à la fin : « Project uses kotlin, but the Arcmutate kotlin plugin is not present. »
 
-**Étape B, avec Arcmutate : bloquée par la licence.** Le plugin est chargé, puis Pitest s'arrête : `java.lang.IllegalStateException: No licence found. See https://www.arcmutate.com for details.` (`com.arcmutate.kotlin.licence.Licence.findAndCheckLicence`). À relancer avec la licence, puis comparer le nombre de mutants avec l'étape A.
+**Filtre de Pitest seul, à la place d'Arcmutate.** `--avoidCallsTo kotlin.jvm.internal.Intrinsics,kotlin.ResultKt` : 33 mutants au lieu de 38, 31 tués (94 %, dont 1 par dépassement de délai). Les cinq mutants écartés sont ceux des lignes 36 et 39 de `Fusion.kt` : quatre de code généré, et un vrai mutant tué (« replaced return value with Collections.emptyMap for veganbrain/spike/Fusion::fiche », ligne 36), perdu parce que le filtre agit sur la ligne entière. Il laisse le dépassement de délai de la coroutine (ligne 43) et l'accesseur. Le filtre n'est donc pas activé par défaut. Passer une liste remplace aussi celle de Pitest par défaut (« If a list is not explicitly supplied then PIT will default to a list of common logging packages », https://pitest.org/quickstart/commandline/) : sans effet ici, le spike ne journalise rien.
+
+**Étape B, avec Arcmutate : abandonnée.** Sans licence, le plugin `com.arcmutate:pitest-kotlin-plugin:1.5.2` se chargeait, puis Pitest s'arrêtait : `java.lang.IllegalStateException: No licence found. See https://www.arcmutate.com for details.` L'option a été retirée du spike.
 
 ## Contrainte pour le vrai module partagé
 

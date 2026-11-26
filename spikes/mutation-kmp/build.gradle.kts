@@ -32,11 +32,6 @@ val pitestOutil: Configuration = configurations.create("pitestOutil")
 dependencies {
     pitestOutil("org.pitest:pitest-command-line:1.30.2")
     pitestOutil("org.pitest:pitest-junit5-plugin:1.2.3")
-    // Étape B : ./gradlew pitest -Parcmutate. La licence (arcmutate-licence.txt, à la racine du spike)
-    // ne va jamais dans le dépôt (.gitignore) ; https://docs.arcmutate.com/docs/kotlin.html.
-    if (providers.gradleProperty("arcmutate").isPresent) {
-        pitestOutil("com.arcmutate:pitest-kotlin-plugin:1.5.2")
-    }
 }
 
 val jvmTest = tasks.named<Test>("jvmTest")
@@ -63,6 +58,9 @@ tasks.register<JavaExec>("pitest") {
             "--includeLaunchClasspath", "false",
             "--outputFormats", "HTML,XML",
             "--timestampedReports", "false",
-        )
+        ) + (providers.gradleProperty("eviterAppels").orNull?.let { listOf("--avoidCallsTo", it) } ?: emptyList())
+        // -PeviterAppels=kotlin.jvm.internal.Intrinsics,kotlin.ResultKt écarte les lignes qui appellent Intrinsics et ResultKt (une partie du code généré),
+        // mais ligne entière (« Any lines of code containing calls to these classes will not be mutated »,
+        // https://pitest.org/quickstart/commandline/) ; il remplace la liste par défaut de Pitest (journalisation). Voir README.md.
     })
 }

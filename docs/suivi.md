@@ -4,7 +4,7 @@ Dernière mise à jour : 2026-11-26
 
 ## En cours
 
-- 4. Licence Arcmutate et spike Pitest + Arcmutate sur la cible JVM du module partagé (commencée le 2026-11-26). Étape A (Pitest seul) faite ; étape B (Arcmutate) attend la licence open source, que tu demandes à support@arcmutate.com.
+- Rien. Prochaine tâche, sur ton feu vert : 5.
 
 ## À faire
 
@@ -91,6 +91,7 @@ Dernière mise à jour : 2026-11-26
   - Q-3 affine le « pas de redistribution » de docs/cadrage.md:283 : l'image d'OFF est copiée dans R2, pour les seuls membres du carnet, avec sa mention CC BY-SA (OFF-05).
 
 - 2026-11-26 : **tâche 4, étape A** : Pitest 1.30.2 tourne sur la cible `jvm()` d'un module KMP (Kotlin 2.4.21, Gradle 9.7.0), tests `kotlin.test` dans `commonTest`, par une tâche Gradle maison (`spikes/mutation-kmp/build.gradle.kts`). Preuve : `./gradlew pitest` → « Generated 38 mutations Killed 32 (84%) », dont 5 des 6 mutants non tués en code généré (coroutine, `!!`, accesseur) ; README relu par le sous-agent relecteur, ses 7 constats appliqués après vérification de leurs preuves ; `./gradlew pitest -Parcmutate` → « No licence found ». Détail : `spikes/mutation-kmp/README.md`.
+- 2026-11-26 : **tâche 4 close** : Arcmutate écarté sur ta décision, pas de licence gratuite (preuve : ta réponse « ca va pas le faire arcmutate car il n'y a pas de licence gratuite ») ; mutation avec Pitest seul sur la cible JVM (docs/cadrage.md, section mutation). Filtre `--avoidCallsTo kotlin.jvm.internal.Intrinsics,kotlin.ResultKt` mesuré : 33 mutants au lieu de 38 ; sur les 5 écartés, un vrai mutant tué, donc filtre non activé. L'option `-Parcmutate` et la ligne `arcmutate-licence.txt` de .gitignore sont retirées.
 
 ## À trancher
 

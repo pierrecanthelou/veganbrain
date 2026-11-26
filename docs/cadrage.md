@@ -10,7 +10,7 @@ Aucun obstacle sérieux aux deux décisions prises (Kotlin Multiplatform, Cloudf
 
 **Statut : validé le 2026-11-22.** Décisions prises à la validation :
 - Workers Paid, déjà souscrit (§2) ;
-- dépôt public : CI GitHub Actions gratuite, licence Arcmutate open source à demander (§6) ;
+- dépôt public : CI GitHub Actions gratuite (§6) ; mutation avec Pitest seul, Arcmutate écarté le 2026-11-26 ;
 - ~~un avis par personne~~ remplacé le 2026-11-22 : **un seul avis commun par carnet, une note commune**. Un conflit sur ce texte long reste possible (LWW, §3) et c'est assumé ;
 - multi-utilisateur, « porte ouverte » (2026-11-22) : la V1 reste privée pour deux personnes, mais les données sont rangées par carnet avec ses membres, et l'authentification passe par une interface remplaçable. Les comptes publics et les obligations des stores viendront avec une éventuelle publication ;
 - distribution par TestFlight et test interne Google Play : l'exigence d'API cible Play s'applique.
@@ -378,7 +378,7 @@ Vouloir que le rappel arrive aussi chez l'autre personne. Il faudrait alors FCM 
 | Unitaire, module partagé | `kotlin.test` dans commonTest, exécuté sur JVM et sur simulateur iOS (`allTests`) | Kotlin 2.4.21 | https://kotlinlang.org/docs/multiplatform/multiplatform-run-tests.html |
 | Coroutines / Flow | `kotlinx-coroutines-test` (`runTest`) + Turbine | 1.11.0 ; Turbine 1.2.1 | https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/, https://github.com/cashapp/turbine |
 | Assertions (option) | Kotest assertions : « supported on all targets » | 6.2.7 (11 nov. 2026) | https://kotest.io/docs/quickstart |
-| Mutation | Pitest + Arcmutate (extension Kotlin) sur la cible **JVM** du module partagé | Pitest 1.30.2. Arcmutate payant, voir plus bas. | https://pitest.org/faq/, https://docs.arcmutate.com/docs/kotlin.html |
+| Mutation | Pitest seul sur la cible **JVM** du module partagé, par une tâche Gradle maison (Arcmutate écarté le 2026-11-26, voir plus bas) | Pitest 1.30.2 | https://pitest.org/quickstart/commandline/, `spikes/mutation-kmp/README.md` |
 | End to end, deux plateformes | **Maestro** (comparaison ci-dessous) | CLI 2.12.1, gratuit. iOS : « Full support for simulators ». | https://docs.maestro.dev/get-started/supported-platform |
 | Accessibilité Android | Compose : `enableAccessibilityChecks()` (ATF, Compose 1.8+). Taille de texte : `DeviceConfigurationOverride.FontScale`. | — | https://developer.android.com/develop/ui/compose/accessibility/testing, https://developer.android.com/develop/ui/compose/testing/common-patterns |
 | Accessibilité iOS | XCUITest `performAccessibilityAudit` (iOS 17+), catégories `.dynamicType` et `.contrast` | Version Xcode minimale non établie | https://developer.apple.com/documentation/xcuiautomation/xcuiapplication/performaccessibilityaudit(for:_:) |
@@ -400,13 +400,13 @@ Vouloir que le rappel arrive aussi chez l'autre personne. Il faudrait alors FCM 
 | Option | Pour | Contre |
 |---|---|---|
 | **Pitest + Arcmutate, cible JVM** | Seul chemin documenté pour Kotlin (« via the Arcmutate kotlin plugin ») | Payant : la page d'accueil, relue le 2026-11-26, affiche Base à 8 $ et Pro à 12 $/utilisateur/mois ; les 13 $/mois de la page d'abonnement n'ont pas été relus (page rendue en JavaScript). Gratuit en open source (« We provide free licenses for open-source projects. Contact us to learn more. », https://www.arcmutate.com/, relu le 2026-11-26 ; contact support@arcmutate.com, https://docs.arcmutate.com/licence.html) ou en évaluation (https://subscribe.arcmutate.com/trial, durée non vérifiée). Le plugin Gradle pitest ne supporte pas KMP (ticket #234 ouvert depuis 2020) : il faudra une tâche Gradle maison. |
-| Pitest seul, cible JVM | Gratuit | Pitest mute le bytecode JVM. La qualité des mutants sur du Kotlin sans Arcmutate n'est pas documentée. |
+| Pitest seul, cible JVM | Gratuit | Pitest mute le bytecode JVM. Mesuré par le spike du 2026-11-26 : sur 38 mutants, au moins 12 portent sur du code généré par Kotlin (accesseurs, références de propriété, `!!`, coroutine), dont 6 non tués ou en dépassement de délai. |
 | kaputt (mutants en IR Kotlin) | « Verified … against jvm, iosSimulatorArm64 » | Projet d'août 2026, une étoile, un seul auteur |
 
 **Recommandation** :
-- Pitest + Arcmutate sur la cible JVM du module partagé, précédé en phase 2 d'un **spike** qui vérifie le branchement sur KMP. Spike du 2026-11-26 : Pitest seul fonctionne sur la cible `jvm()` d'un module KMP par une tâche Gradle maison ; Arcmutate attend sa licence (`spikes/mutation-kmp/README.md`). Repli si le spike échoue : Pitest seul sur un module JVM extrait du domaine pur.
+- Tranché le 2026-11-26 : **Pitest seul** sur la cible JVM du module partagé, Arcmutate écarté (décision de l'utilisateur du 2026-11-26 : pas de licence gratuite ; la page citée plus haut annonce pourtant des licences open source gratuites, conditions non relues). Le spike du 2026-11-26 montre que Pitest tourne sur la cible `jvm()` d'un module KMP par une tâche Gradle maison, sans extraire de module JVM (`spikes/mutation-kmp/README.md`). Conséquence : chaque `expect` de `commonMain` a un `actual` pour la JVM. Les mutants de code généré par Kotlin restent dans le score. Le filtre `--avoidCallsTo` écarte 4 de ces 6 mutants de code généré non tués ou en dépassement de délai, mais ligne entière, au prix d'un vrai mutant tué : il n'est pas activé.
 - **Seuil** proposé, sans recommandation officielle trouvée : 70 % au départ sur le domaine (règles de la table dorée, fusion de synchro), relevé à 80 % une fois stable.
-- **Fréquence** : nuit et avant chaque version, pas sur chaque PR. L'analyse incrémentale fait partie de l'offre Arcmutate Pro à 12 $ (« Git integration, incremental analysis », https://www.arcmutate.com/). Non vérifié : si la licence open source l'inclut, et ce que fait Pitest seul.
+- **Fréquence** : nuit et avant chaque version, pas sur chaque PR. Pitest a sa propre analyse incrémentale, marquée expérimentale (« PIT contains an experimental feature [...] incremental analysis », https://pitest.org/quickstart/incremental_analysis/ ; options `--historyInputLocation` et `--historyOutputLocation`). Non essayée par le spike.
 
 ### CI
 
@@ -420,11 +420,11 @@ Sources : https://docs.github.com/en/billing/concepts/product-billing/github-act
 
 **Recommandation** : GitHub Actions avec Linux sur chaque PR, et macOS limité à la branche principale et à la nuit. Je passerais à Xcode Cloud si la facture macOS dépasse quelques dollars par mois.
 
-Tranché le 2026-11-22 : dépôt public. La CI sur runners standard est gratuite, macOS compris (page de facturation ci-dessus), et la licence Arcmutate open source est à demander. Limiter macOS à la branche principale et à la nuit devient un choix de rapidité, plus de coût.
+Tranché le 2026-11-22 : dépôt public. La CI sur runners standard est gratuite, macOS compris (page de facturation ci-dessus), et la mutation se fait avec Pitest seul, gratuit (Arcmutate écarté le 2026-11-26). Limiter macOS à la branche principale et à la nuit devient un choix de rapidité, plus de coût.
 
 ### Ce qui me ferait changer d'avis
 
-- Le spike de mutation échoue des deux façons : on ferait de la mutation sur le seul module domaine JVM.
+- ~~Le spike de mutation échoue des deux façons : on ferait de la mutation sur le seul module domaine JVM.~~ Tombé le 2026-11-26 : Pitest seul tourne sur la cible `jvm()` (`spikes/mutation-kmp/README.md`).
 - Maestro ne peut pas piloter l'écran caméra en simulateur (non vérifié) : il faudrait des E2E de scan avec un scanner simulé injecté.
 
 ---
@@ -454,7 +454,6 @@ Tranché le 2026-11-22 : dépôt public. La CI sur runners standard est gratuite
 
 - Gratuité de Zero Trust jusqu'à 50 utilisateurs : seule une architecture de référence le dit (sans effet sur la recommandation).
 - Plafond de dépense Workers : D1 n'est pas nommé parmi les produits exclus ; à confirmer.
-- Tarif Arcmutate : les deux pages officielles se contredisent.
 - Taille ajoutée au binaire iOS par CMP : non trouvée (sans effet, CMP non retenu).
 - Forcer Dynamic Type dans un test XCUITest : pas de méthode officielle trouvée.
 - Maestro et caméra en simulateur : non vérifié.

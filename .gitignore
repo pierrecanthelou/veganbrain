@@ -9,9 +9,6 @@
 .wrangler/
 node_modules/
 
-# Licence Arcmutate (https://docs.arcmutate.com/docs/licence-management.html) : jamais dans le dépôt public
-arcmutate-licence.txt
-
 # Clés de signature (elles vont dans les secrets GitHub, docs/cadrage.md)
 *.jks
 *.keystore
