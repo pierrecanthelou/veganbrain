@@ -85,6 +85,8 @@ jobs:
       # Image google_apis et non google_apis_playstore comme l'AVD du spike : plus légère, et ni
       # ThemeSystemeTest ni le flux onglets n'ont besoin de Play. Les deux images existent en 36.1 x86_64
       # (sys-img2-4.xml de Google). `-show-kernel` montre où le démarrage s'arrête, à retirer une fois au vert.
+      # `ram-size` explicite : sans lui, l'AVD créé par l'action démarrait avec 96 Mo de mémoire, d'où un
+      # OOM d'init, une panique du noyau et un redémarrage en boucle. Le runner a 4 cœurs et 15,7 Go (diagnostic).
       # `script` : l'action lance chaque ligne dans un `sh -c` séparé (src/script-parser.ts), d'où un seul script.
       - name: Tests sur émulateur
         uses: ReactiveCircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d # v2.38.0
@@ -92,6 +94,7 @@ jobs:
           api-level: '36.1'
           target: google_apis
           arch: x86_64
+          ram-size: 4096M
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -show-kernel
           script: bash scripts/ci/tests-emulateur.sh
 
