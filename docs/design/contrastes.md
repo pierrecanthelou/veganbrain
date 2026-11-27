@@ -1,6 +1,6 @@
 # Contrastes des thèmes clair et sombre
 
-Calculés le 2026-11-22 à partir de `tokens.json` (version 2). Ils sont à refaire si une valeur de couleur ou une opacité dérivée change.
+Calculés le 2026-11-22 à partir de `tokens.json` (version 2). Ils valent aussi pour la version 3 (2026-11-27) : ses ajouts (`voile-fiche`, `ombre-feuille`, `ombre-bouton`, `ombre-boite`, `poignee`, deux rayons) n'entrent dans aucune paire ci-dessous. Ils sont à refaire si une valeur de couleur ou une opacité dérivée change. Le test `ContrastesTest` (`shared/src/commonTest/kotlin/app/veganbrain/design/`) recalcule depuis `tokens.json` les paires exigées (critère A11-01) et échoue si un ratio passe sous son seuil ou s'écarte de la valeur d'ici, qu'il recopie au centième.
 
 ## Méthode
 
