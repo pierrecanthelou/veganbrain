@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">VeganBrain</string>
+    <string name="onglet_produits">Produits</string>
+    <string name="onglet_recettes">Recettes</string>
+</resources>
