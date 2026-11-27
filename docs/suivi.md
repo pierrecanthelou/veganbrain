@@ -4,7 +4,14 @@ Dernière mise à jour : 2026-11-27
 
 ## En cours
 
-- Rien : tâche 11 (CI Linux) à lancer sur ton signal.
+- Tâche 11 (CI Linux), lancée sur ton signal du 2026-11-27 (« on commence la phase 2 »). Écrit, pas encore poussé : `.github/workflows/ci-linux.yml` et `scripts/ci/`.
+   - Sourcé :
+     - Scan : binaire gitleaks 8.30.1, licence MIT, empreinte fixée. L'action gitleaks-action, sous licence propre depuis sa v2, n'est pas retenue.
+     - Secrets : sur une PR venant d'un fork, GitHub ne passe aucun secret hors `GITHUB_TOKEN`, qui y est en lecture seule (https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows). La CI n'utilise aucun secret, déclencheur `pull_request` et `permissions: contents: read` ; le script des secrets n'est pas touché.
+     - Émulateur : android-emulator-runner 2.38.0, KVM activé par la règle udev de son README, image `android-36.1;google_apis_playstore;x86_64`, la même que l'AVD du spike (présente dans sys-img2-4.xml de Google). L'action lance chaque ligne de `script` dans un `sh -c` séparé (src/script-parser.ts), d'où `scripts/ci/tests-emulateur.sh`.
+     - Cache Gradle `basic` (MIT) plutôt que le défaut `enhanced`, propriétaire (DISTRIBUTION.md de gradle/actions 6.4.1).
+   - Preuve d'échec du scan : un témoin, dans le job, fabrique au moment de l'exécution un jeton au format `github-pat` dans un dépôt jetable et exige que gitleaks échoue avec cette règle. Les essais en local de gitleaks et d'actionlint ont été refusés par le classifieur de permissions (téléchargement puis exécution d'un binaire) ; je ne les ai pas contournés.
+   - Essai local, AVD `Medium_Phone_API_36.1` : `jvmTest` et `assembleDebug`, puis `scripts/ci/tests-emulateur.sh` (ThemeSystemeTest 2 sur 2, flux `onglets` passé), puis `scripts/ci/resume-tests.py` : les quatre suites exigées sont trouvées, code 0. Avec un seul rapport, le résumé nomme les trois suites manquantes et rend 1.
 
 ## À faire
 
