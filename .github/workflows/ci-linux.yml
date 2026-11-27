@@ -73,14 +73,26 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
-      # Même image que l'AVD du spike (Medium_Phone_API_36.1, google_apis_playstore).
+      # Diagnostic : ressources du runner et accélération matérielle vue par l'émulateur
+      # (le premier run est resté « device offline » 10 minutes sans dire si KVM servait).
+      - name: Diagnostic de l'accélération
+        run: |
+          nproc
+          free -m
+          ls -l /dev/kvm
+          "$ANDROID_HOME/emulator/emulator" -accel-check
+
+      # Image google_apis et non google_apis_playstore comme l'AVD du spike : plus légère, et ni
+      # ThemeSystemeTest ni le flux onglets n'ont besoin de Play. Les deux images existent en 36.1 x86_64
+      # (sys-img2-4.xml de Google). `-show-kernel` montre où le démarrage s'arrête, à retirer une fois au vert.
       # `script` : l'action lance chaque ligne dans un `sh -c` séparé (src/script-parser.ts), d'où un seul script.
       - name: Tests sur émulateur
         uses: ReactiveCircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d # v2.38.0
         with:
           api-level: '36.1'
-          target: google_apis_playstore
+          target: google_apis
           arch: x86_64
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -show-kernel
           script: bash scripts/ci/tests-emulateur.sh
 
       - name: Résumé des tests
