@@ -88,6 +88,8 @@ jobs:
       # (sys-img2-4.xml de Google). `-show-kernel` montre où le démarrage s'arrête, à retirer une fois au vert.
       # `ram-size` explicite : sans lui, l'AVD créé par l'action démarrait avec 96 Mo de mémoire, d'où un
       # OOM d'init, une panique du noyau et un redémarrage en boucle. Le runner a 4 cœurs et 15,7 Go (diagnostic).
+      # En Mo sans suffixe, comme hw.ramSize dans l'AVD du spike : l'émulateur 36.4.9 lit `4096M` comme 96 Mo
+      # (« Memory: 39816K/97744K » au démarrage du noyau), là où le 37.3.10 l'acceptait.
       # `disk-size` aussi : la partition de données par défaut ne laissait pas installer l'APK de 12 Mo
       # (« Requested internal only, but not enough space »).
       # `emulator-build` : émulateur 36.4.9 (build 14788078), celui du poste où ces tests passent. Avec le 37.3.10
@@ -102,7 +104,7 @@ jobs:
           emulator-build: '14788078'
           target: google_apis
           arch: x86_64
-          ram-size: 4096M
+          ram-size: '4096'
           disk-size: 4096M
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -show-kernel
           script: bash scripts/ci/tests-emulateur.sh
