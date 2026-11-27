@@ -90,11 +90,16 @@ jobs:
       # OOM d'init, une panique du noyau et un redémarrage en boucle. Le runner a 4 cœurs et 15,7 Go (diagnostic).
       # `disk-size` aussi : la partition de données par défaut ne laissait pas installer l'APK de 12 Mo
       # (« Requested internal only, but not enough space »).
+      # `emulator-build` : émulateur 36.4.9 (build 14788078), celui du poste où ces tests passent. Avec le 37.3.10
+      # installé par défaut, surfaceflinger s'arrêtait toutes les 20 à 26 s sur « Assertion failed:
+      # !rcEnc->featureInfo()->hasReadColorBufferDma » (mapper.ranchu.so, logcat crash), ce qui relançait
+      # zygote et cassait l'installation de l'APK puis le lancement de l'activité de test.
       # `script` : l'action lance chaque ligne dans un `sh -c` séparé (src/script-parser.ts), d'où un seul script.
       - name: Tests sur émulateur
         uses: ReactiveCircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d # v2.38.0
         with:
           api-level: '36.1'
+          emulator-build: '14788078'
           target: google_apis
           arch: x86_64
           ram-size: 4096M
