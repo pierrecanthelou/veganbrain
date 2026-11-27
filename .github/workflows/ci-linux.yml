@@ -73,14 +73,14 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
-      # Diagnostic : ressources du runner et accélération matérielle vue par l'émulateur
-      # (le premier run est resté « device offline » 10 minutes sans dire si KVM servait).
+      # Diagnostic : ressources du runner et droits sur /dev/kvm (le premier run est resté
+      # « device offline » 10 minutes sans dire si KVM servait). `emulator -accel-check` vient après
+      # l'émulateur : le binaire n'est pas sur l'image du runner, l'action l'installe.
       - name: Diagnostic de l'accélération
         run: |
           nproc
           free -m
           ls -l /dev/kvm
-          "$ANDROID_HOME/emulator/emulator" -accel-check
 
       # Image google_apis et non google_apis_playstore comme l'AVD du spike : plus légère, et ni
       # ThemeSystemeTest ni le flux onglets n'ont besoin de Play. Les deux images existent en 36.1 x86_64
@@ -94,6 +94,10 @@ jobs:
           arch: x86_64
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -show-kernel
           script: bash scripts/ci/tests-emulateur.sh
+
+      - name: Accélération vue par l'émulateur
+        if: ${{ !cancelled() }}
+        run: '"$ANDROID_HOME/emulator/emulator" -accel-check || true'
 
       - name: Résumé des tests
         if: ${{ !cancelled() }}
