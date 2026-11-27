@@ -119,4 +119,5 @@ jobs:
             shared/build/test-results/jvmTest/
             androidApp/build/outputs/androidTest-results/connected/
             build/maestro/
+            build/emulateur/
           if-no-files-found: warn

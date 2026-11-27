@@ -9,6 +9,17 @@
 
 set -euo pipefail
 
+# Diagnostic, quelle que soit l'issue : plantages natifs vus par Android (tampon crash du logcat),
+# et logcat complet gardé dans les rapports.
+mkdir -p build/emulateur
+diagnostic() {
+    echo "::group::logcat, tampon crash"
+    adb logcat -d -b crash | tail -200 || true
+    echo "::endgroup::"
+    adb logcat -d -b all > build/emulateur/logcat.txt 2>&1 || true
+}
+trap diagnostic EXIT
+
 ./gradlew :androidApp:connectedDebugAndroidTest
 ./gradlew :androidApp:installDebug
 
