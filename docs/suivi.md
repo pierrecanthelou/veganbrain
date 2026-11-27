@@ -4,7 +4,7 @@ Dernière mise à jour : 2026-11-27
 
 ## En cours
 
-- Rien : tâche 10 (spike Maestro, volet Android) à lancer sur ton signal.
+- Rien : tâche 11 (CI Linux) à lancer sur ton signal.
 
 ## À faire
 
@@ -15,9 +15,6 @@ Phase 2, « socle qualité, avant les fonctionnalités » (ton brief du 2026-11-
 - Secrets : sur ta demande du 2026-11-26 (« un script, pas une ia »), un script d'installation, lancé par toi, demande chaque secret et le range à sa place : fichier local ignoré par Git, secrets Wrangler du Worker (docs/cadrage.md:155), secrets GitHub (docs/cadrage.md:157). Aucune IA ne voit ni ne manipule un secret. Le script est créé à la tâche 8 avec le premier secret ; chaque tâche qui introduit un secret l'y ajoute, et son « Fini quand » comprend ce passage du script.
 - Ci-dessous, « point N du §14 » renvoie à docs/criteres.md section 14, « point N d'À trancher » à la section À trancher de ce fichier.
 
-10. **Spike Maestro, volet Android, sur ce poste.** Le README de Maestro (https://github.com/mobile-dev-inc/maestro, branche main, relu le 2026-11-26) annonce l'installation « on macOS, Linux or Windows (WSL) », et sa documentation, d'après ce README, couvre aussi une installation Windows sans WSL : laquelle marche ici est à vérifier en premier.
-    - Points à vérifier : lecture du `testTag` (docs/criteres.md:220), mode avion, boîtes d'autorisation (notifications, caméra) et moyen d'accorder la caméra d'avance pour les flux qui ouvrent le scan, caméra en émulateur (docs/cadrage.md:396), notification système touchée, rotation en paysage.
-    - Fini quand un README de spike donne pour chaque point le résultat, avec sa commande et sa sortie, que tu as choisi pour chaque ligne E concernée : Maestro, Appium, test natif ou manuel. La colonne Niveau de ces lignes, docs/criteres.md:34 et :220 sont alors mis à jour. Critères : avec une autorisation système, RAP-04, RAP-12, SCN-12 ; avec la caméra, FPR-09 ; avec une notification, RAP-07 ; en mode avion ou hors réseau, CHR-01, SCN-04, SCN-09, FPR-08 ; en paysage, A11-09.
 11. **CI Linux sur chaque PR** (GitHub Actions) : `jvmTest`, build Android, scan de secrets, puis émulateur (docs/cadrage.md:415 : « émulateur avec KVM, Maestro Android ») où tourne le flux Maestro du spike.
     - À sourcer : l'outil de scan, les secrets d'Actions et leur comportement sur les PR venant de forks (docs/cadrage.md:157-158).
     - Fini quand une PR montre le job vert avec les tests de LIS-08, d'A11-01 et d'A11-08 et le flux Maestro, et que l'échec du scan sur un secret de test est montré en local ou par le mécanisme de test de l'outil, jamais par un faux secret poussé dans le dépôt public. Critères : LIS-08, A11-01, A11-08.
@@ -182,6 +179,13 @@ Phase 2, « socle qualité, avant les fonctionnalités » (ton brief du 2026-11-
      - Les paires en attente (lignes 44-45 et 60-62) sont exclues dans les deux thèmes, comme le dit A11-01 (docs/criteres.md:204), qui met ces lignes entières en attente. Leurs valeurs en sombre passent pourtant le seuil (7,08 ; 7,15 ; 3,10 ; 3,38 ; 6,51) et ne sont pas testées, alors que le README (Thème sombre) dit que tout passe en sombre. Elles entreront au test avec leur point : 44-45 et 62 à la tâche 15 (points 15 et 14), 60-61 quand l'écran des champs tournera (point 13).
      - Les textes Material de la barre provisoire gardent la typographie Material, puisque `MaterialTheme` ne reçoit pas les styles de texte. Les styles des jetons serviront avec les premiers écrans.
      - Non vérifié : un flash clair au lancement en sombre. Le manifeste garde un thème système clair (`Theme.Material.Light.NoActionBar`), et la fenêtre de démarrage s'affiche avant Compose.
+- 2026-11-27 : **tâche 10 close** : spike Maestro, volet Android, sur ce poste. Détail, commandes et sorties : spikes/maestro/README.md.
+   - Installation Windows native, sans WSL : zip de Maestro CLI 2.12.1 (empreinte sha256 vérifiée contre la release), statistiques coupées par variables d'environnement. AVD `Medium_Phone_API_36.1`, image `google_apis_playstore`.
+   - Résultats : `testTag` lu par `id:` une fois `testTagsAsResourceId = true` posé sur la racine (MainActivity.kt) ; mode avion coupe vraiment le réseau (sonde adb) ; boîtes d'autorisation notifications et caméra visibles et pilotées par identifiant ; caméra accordée d'avance par `launchApp` ; aperçu caméra en émulateur (scène virtuelle) ; notification touchée depuis le volet ; paysage. `onglets` et les cinq flux du banc, rejoués trois fois, passent 18 fois sur 18 ; le mode avion et le paysage n'ont tourné qu'une à deux fois.
+   - Écart à la documentation : la clé `all` des autorisations, et donc le défaut de `launchApp` (« all permissions are allowed »), sont sans effet sur Android 16 ; seules les autorisations nommées marchent. Règle des flux : toujours nommer chaque autorisation. Aucune issue trouvée chez Maestro.
+   - Tes choix (réponses du 2026-11-27, toutes « Recommandé ») : Maestro pour RAP-04, RAP-12, SCN-12 (M gardé jusqu'à la tâche 14), RAP-07, FPR-09 (prise de photo à confirmer quand l'écran existe), A11-09 (avec contrôle visuel manuel) ; hors réseau (CHR-01, SCN-04, SCN-09, FPR-08) par `setAirplaneMode` sur Android et coupure du build de test sur iOS. Colonne Niveau inchangée ; docs/criteres.md:34 et :220 mis à jour.
+   - Non essayé : prise d'une photo, lecture d'un code-barres par la caméra, AVD tablette, tout iOS (tâche 14). Un échec isolé vu une fois avant les répétitions : course entre `clearState` et le relancement, côté Android (README, Stabilité).
+   - Banc jetable `spikes/maestro/banc/` (app Java sans dépendance) pour les autorisations, la notification et la caméra. `connectedDebugAndroidTest` après l'ajout de `testTagsAsResourceId` : 2 sur 2.
 
 ## À trancher
 

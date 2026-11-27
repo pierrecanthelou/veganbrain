@@ -476,5 +476,5 @@ Sources :
 - Plafond de dépense Workers : D1 n'est pas nommé parmi les produits exclus ; à confirmer.
 - Taille ajoutée au binaire iOS par CMP : non trouvée (sans effet, CMP non retenu).
 - Forcer Dynamic Type dans un test XCUITest : pas de méthode officielle trouvée.
-- Maestro et caméra en simulateur : non vérifié.
+- Maestro et caméra en simulateur : vérifié sur l'émulateur Android pour l'aperçu (spikes/maestro/README.md, 2026-11-27) ; prise de photo et iOS non vérifiés.
 - Qualification « usage public » de l'ODbL pour une app à deux personnes : question juridique.

@@ -1,0 +1,7 @@
+# Mode avion activé par Maestro ; la coupure réelle se vérifie par adb (README, point 2).
+appId: app.veganbrain
+---
+- launchApp
+- setAirplaneMode: enabled
+- assertVisible:
+    id: onglets.produits

@@ -1,0 +1,15 @@
+# RAP-07 : la notification de l'app, touchée dans le volet, rouvre l'app avec son extra.
+appId: app.veganbrain.banc
+---
+- launchApp:
+    clearState: true
+    permissions:
+      notifications: allow
+- tapOn: "Poster notification"
+- assertVisible: "Notification postée"
+- pressKey: Home
+- swipe:
+    start: 50%, 1%
+    end: 50%, 70%
+- tapOn: "Rappel du banc"
+- assertVisible: "Ouvert depuis la notification"

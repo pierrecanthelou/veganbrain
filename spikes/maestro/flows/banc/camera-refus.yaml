@@ -1,0 +1,11 @@
+# SCN-12 : caméra refusée dans la boîte système, l'app le sait.
+appId: app.veganbrain.banc
+---
+- launchApp:
+    clearState: true
+    permissions:
+      camera: unset
+- tapOn: "Ouvrir caméra"
+- tapOn:
+    id: "com.android.permissioncontroller:id/permission_deny_button"
+- assertVisible: "Caméra refusée"

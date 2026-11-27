@@ -1,0 +1,13 @@
+# RAP-12 : refus dans la boîte système, puis aucune notification ne part.
+appId: app.veganbrain.banc
+---
+- launchApp:
+    clearState: true
+    permissions:
+      notifications: unset
+- tapOn: "Demander notifications"
+- tapOn:
+    id: "com.android.permissioncontroller:id/permission_deny_button"
+- assertVisible: "Notifications refusées"
+- tapOn: "Poster notification"
+- assertVisible: "Notifications non accordées"

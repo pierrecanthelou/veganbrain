@@ -1,0 +1,17 @@
+# Caméra accordée d'avance (pas de boîte), aperçu de l'émulateur (virtualscene) qui reçoit des images.
+appId: app.veganbrain.banc
+---
+- launchApp:
+    clearState: true
+    permissions:
+      camera: allow
+- tapOn: "Ouvrir caméra"
+- assertNotVisible:
+    id: "com.android.permissioncontroller:id/permission_deny_button"
+- extendedWaitUntil:
+    visible: "Aperçu caméra actif"
+    timeout: 15000
+- extendedWaitUntil:
+    visible: "Images reçues : [0-9]+"
+    timeout: 15000
+- takeScreenshot: camera-virtualscene

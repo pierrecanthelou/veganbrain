@@ -1,0 +1,17 @@
+# Flux technique du squelette (tâche 10), repris par la CI Linux (tâche 11).
+# Les onglets sont visés par leur identifiant commun (docs/criteres.md §13).
+appId: app.veganbrain
+---
+- launchApp:
+    clearState: true
+- assertVisible:
+    id: onglets.produits
+    selected: true
+- tapOn:
+    id: onglets.recettes
+- assertVisible:
+    id: onglets.recettes
+    selected: true
+- assertVisible:
+    id: onglets.produits
+    selected: false

@@ -18,6 +18,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import app.veganbrain.android.theme.Theme
 import app.veganbrain.android.theme.ThemeVegan
 import app.veganbrain.android.theme.compose
@@ -50,6 +52,9 @@ private fun EcranPrincipal() {
     val etat by presenter.etat.collectAsState()
 
     Scaffold(
+        // Expose les `testTag` en `resource-id`, que lisent Maestro (sélecteur `id:`) et UiAutomator :
+        // https://docs.maestro.dev/reference/selectors/core-selectors (« Android Compose »), spikes/maestro/README.md.
+        modifier = Modifier.semantics { testTagsAsResourceId = true },
         // `fond` est le repli du dégradé fond-haut → fond-bas (README, Couleurs), qui arrivera avec les écrans.
         containerColor = Theme.palette.fond.compose,
         bottomBar = {

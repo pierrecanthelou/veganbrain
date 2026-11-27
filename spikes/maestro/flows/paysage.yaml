@@ -1,0 +1,13 @@
+# Rotation en paysage : les onglets restent visibles et pilotables (A11-09, sur téléphone ici).
+appId: app.veganbrain
+---
+- launchApp:
+    clearState: true
+- setOrientation: LANDSCAPE_LEFT
+- tapOn:
+    id: onglets.recettes
+- assertVisible:
+    id: onglets.recettes
+    selected: true
+- takeScreenshot: paysage
+- setOrientation: PORTRAIT

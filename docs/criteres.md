@@ -31,7 +31,7 @@ Un critère d'état d'écran (ce que l'écran affiche, ce qu'une intention chang
 
 Le scan par caméra n'est pas pilotable en simulateur avec certitude (`docs/cadrage.md:428`, `:479`). Les lignes E du scan passent donc par « Saisir le code-barres » (SCN-16), qui suit le même parcours qu'un code lu. La lecture par la caméra elle-même reste un test manuel (SCN-02).
 
-Les lignes E qui passent par OFF s'appuient sur un faux serveur OFF, branché dans un build de test (choix annoncé). Le passage en mode avion et les boîtes d'autorisation système sous Maestro restent à vérifier en phase 2 : c'est le risque nommé en `docs/cadrage.md:396`.
+Les lignes E qui passent par OFF s'appuient sur un faux serveur OFF, branché dans un build de test (choix annoncé). Le risque nommé en `docs/cadrage.md:396` (mode avion, boîtes d'autorisation, caméra, notification sous Maestro) est levé sur Android par le spike `spikes/maestro/README.md` (2026-11-27). Les choix qui en découlent (réponse du 2026-11-27) laissent la colonne Niveau inchangée. Autorisations système (RAP-04, RAP-12, SCN-12) : Maestro, chaque autorisation nommée dans `launchApp` (`notifications`, `camera`), puisque la clé `all` et le défaut sont sans effet ; le M reste jusqu'au volet iOS (tâche 14). Hors réseau (CHR-01, SCN-04, SCN-09, FPR-08) : Maestro, `setAirplaneMode` sur Android ; sur iOS, dont les simulateurs n'ont pas de mode avion, une branche du flux (`runFlow` avec `when: platform: iOS`, https://docs.maestro.dev/maestro-flows/flow-control-and-logic/conditions) active une coupure réseau du build de test. Notification touchée (RAP-07) : Maestro, volet ouvert par glissement. Photo (FPR-09) : Maestro ; la prise d'une photo en émulateur, non essayée, se vérifie quand l'écran existe, avec repli sur « Choisir » ou sur M. Paysage (A11-09) : Maestro sur un AVD tablette pour la rotation et l'usage, contrôle visuel manuel pour les éléments coupés.
 
 ## 1. Listes et navigation
 
@@ -217,7 +217,7 @@ Le modèle est décrit dans `docs/cadrage.md:188-245`. Les lignes C font tourner
 
 Les mêmes identifiants servent de `testTag` (Compose) et d'`accessibilityIdentifier` (SwiftUI), pour que les flux Maestro aient les mêmes sélecteurs sur les deux plateformes (`docs/cadrage.md:69`, `:390`). Forme choisie : `écran.élément`, en minuscules, sans accents, mots séparés par des tirets. Sont listés les éléments qu'un test pilote ou lit à l'écran : ceux des lignes E, et ceux que désignent des lignes U, A ou N. Un élément absent de la table se vise par son texte.
 
-Sur Android, la façon dont Maestro lit un `testTag` est à vérifier dans la documentation Maestro en phase 2.
+Sur Android, Maestro lit un `testTag` par le sélecteur `id:` quand la racine Compose pose `Modifier.semantics { testTagsAsResourceId = true }` (https://docs.maestro.dev/reference/selectors/core-selectors) : c'est fait dans `MainActivity.kt`, vérifié par `spikes/maestro/flows/onglets.yaml` (`spikes/maestro/README.md`, point 1). Sur iOS, `id:` vise l'`accessibilityIdentifier` d'après la même page : à vérifier à la tâche 14.
 
 | Identifiant | Élément | Lignes |
 |---|---|---|

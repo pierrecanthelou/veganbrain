@@ -1,0 +1,19 @@
+# RAP-04 : la boîte système s'ouvre à la première demande, plus à la seconde une fois accordée.
+# L'autorisation est nommée : la clé `all` (et donc le défaut de launchApp) reste sans effet ici (README).
+appId: app.veganbrain.banc
+---
+- launchApp:
+    clearState: true
+    permissions:
+      notifications: unset
+- tapOn: "Demander notifications"
+- assertVisible:
+    id: "com.android.permissioncontroller:id/permission_allow_button"
+- takeScreenshot: boite-notifications
+- tapOn:
+    id: "com.android.permissioncontroller:id/permission_allow_button"
+- assertVisible: "Notifications accordées"
+- tapOn: "Demander notifications"
+- assertNotVisible:
+    id: "com.android.permissioncontroller:id/permission_allow_button"
+- assertVisible: "Notifications accordées"
