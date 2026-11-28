@@ -46,6 +46,8 @@ def main():
         for chemin in sorted(glob.glob(motif, recursive=True)):
             for suite in suites(chemin):
                 nom = nom_court(suite)
+                if nom == "Test Suite":  # Maestro : la suite est anonyme, chaque flux est un testcase.
+                    nom = ", ".join(c.get("name", "?") for c in suite.iter("testcase"))
                 compte = {k: int(suite.get(k, "0")) for k in ("tests", "failures", "errors", "skipped")}
                 lignes.append(
                     f"| {niveau} | {nom} | {compte['tests']} | {compte['failures']} | {compte['errors']} | {compte['skipped']} |"
@@ -53,7 +55,6 @@ def main():
                 vues.add(nom)
                 if compte["failures"] or compte["errors"]:
                     en_echec.append(nom)
-                # Maestro nomme la suite « Test Suite » et chaque flux par un testcase.
                 for cas in suite.iter("testcase"):
                     vues.add(cas.get("name", ""))
                     vues.add(cas.get("classname", "").rsplit(".", 1)[-1])

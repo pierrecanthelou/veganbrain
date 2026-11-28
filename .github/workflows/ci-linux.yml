@@ -73,16 +73,6 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
-      # Diagnostic : ressources du runner et droits sur /dev/kvm (le premier run est resté
-      # « device offline » 10 minutes sans dire si KVM servait). `emulator -accel-check` vient après
-      # l'émulateur : le binaire n'est pas sur l'image du runner, l'action l'installe.
-      - name: Diagnostic de l'accélération
-        run: |
-          nproc
-          free -m
-          df -h /
-          ls -l /dev/kvm
-
       # Image google_apis en API 35, et non l'image 36.1 google_apis_playstore de l'AVD du spike :
       # - en 36.1 (google_apis), surfaceflinger s'arrêtait toutes les 20 à 26 s sur « Assertion failed:
       #   !rcEnc->featureInfo()->hasReadColorBufferDma » (mapper.ranchu.so, tampon crash du logcat), avec
@@ -90,9 +80,9 @@ jobs:
       #   déverrouillé au lancement des tests, d'où « Unable to resolve activity ». Pas reproduit sous Windows
       #   avec le même rendu (`-gpu swiftshader_indirect`, image playstore) ;
       # - ni ThemeSystemeTest ni le flux onglets n'ont besoin de Play ni de l'API 36.
-      # `-show-kernel` montre où le démarrage s'arrête, à retirer une fois au vert.
       # `ram-size` explicite : sans lui, l'AVD créé par l'action démarrait avec 96 Mo de mémoire, d'où un
-      # OOM d'init, une panique du noyau et un redémarrage en boucle. Le runner a 4 cœurs et 15,7 Go (diagnostic).
+      # OOM d'init, une panique du noyau et un redémarrage en boucle. Le runner a 4 cœurs et 15,7 Go (nproc et free -m,
+      # dans une étape de diagnostic depuis retirée).
       # En Mo sans suffixe, comme hw.ramSize dans l'AVD du spike : l'émulateur 36.4.9 lisait `4096M` comme
       # 96 Mo (« Memory: 39816K/97744K » au démarrage du noyau).
       # `disk-size` aussi : la partition de données par défaut ne laissait pas installer l'APK de 12 Mo
@@ -106,12 +96,8 @@ jobs:
           arch: x86_64
           ram-size: '4096'
           disk-size: 4096M
-          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -show-kernel
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
           script: bash scripts/ci/tests-emulateur.sh
-
-      - name: Accélération vue par l'émulateur
-        if: ${{ !cancelled() }}
-        run: '"$ANDROID_HOME/emulator/emulator" -accel-check || true'
 
       - name: Résumé des tests
         if: ${{ !cancelled() }}

@@ -5,7 +5,8 @@
 #    de la release (https://github.com/gitleaks/gitleaks/releases/tag/v8.30.1). Licence MIT.
 # 2. Témoin : dans un dépôt jetable hors du dépôt, un faux jeton fabriqué à l'exécution doit faire
 #    échouer le scan avec la règle github-pat (config/gitleaks.toml:2159-2163 de la v8.30.1 :
-#    `ghp_` suivi de 36 caractères alphanumériques, entropie 3 au moins). Aucun faux secret n'est
+#    le préfixe des jetons personnels classiques de GitHub suivi de 36 caractères alphanumériques,
+#    entropie 3 au moins). Aucun faux secret n'est
 #    écrit dans le dépôt : le préfixe est assemblé en deux morceaux pour que ce script ne déclenche
 #    pas la règle, et le jeton est tiré au hasard à chaque passage.
 # 3. Scan de tout l'historique du dépôt (`gitleaks git`, checkout avec fetch-depth: 0) : échec si
