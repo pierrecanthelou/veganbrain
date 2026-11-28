@@ -1,10 +1,10 @@
 # Suivi du travail
 
-Dernière mise à jour : 2026-11-27
+Dernière mise à jour : 2026-11-28
 
 ## En cours
 
-- Rien : tâche 11 (CI Linux) à lancer sur ton signal.
+- Rien. Prochaine : tâche 12, sur ton signal. La PR #1 (tâche 11) attend ton merge.
 
 ## À faire
 
@@ -15,9 +15,6 @@ Phase 2, « socle qualité, avant les fonctionnalités » (ton brief du 2026-11-
 - Secrets : sur ta demande du 2026-11-26 (« un script, pas une ia »), un script d'installation, lancé par toi, demande chaque secret et le range à sa place : fichier local ignoré par Git, secrets Wrangler du Worker (docs/cadrage.md:155), secrets GitHub (docs/cadrage.md:157). Aucune IA ne voit ni ne manipule un secret. Le script est créé à la tâche 8 avec le premier secret ; chaque tâche qui introduit un secret l'y ajoute, et son « Fini quand » comprend ce passage du script.
 - Ci-dessous, « point N du §14 » renvoie à docs/criteres.md section 14, « point N d'À trancher » à la section À trancher de ce fichier.
 
-11. **CI Linux sur chaque PR** (GitHub Actions) : `jvmTest`, build Android, scan de secrets, puis émulateur (docs/cadrage.md:415 : « émulateur avec KVM, Maestro Android ») où tourne le flux Maestro du spike.
-    - À sourcer : l'outil de scan, les secrets d'Actions et leur comportement sur les PR venant de forks (docs/cadrage.md:157-158).
-    - Fini quand une PR montre le job vert avec les tests de LIS-08, d'A11-01 et d'A11-08 et le flux Maestro, et que l'échec du scan sur un secret de test est montré en local ou par le mécanisme de test de l'outil, jamais par un faux secret poussé dans le dépôt public. Critères : LIS-08, A11-01, A11-08.
 12. **App iOS vide, construite en CI macOS.**
     - Choix : l'outil qui produit le projet Xcode sans Mac, à sourcer et présenté avant d'agir.
     - Écart annoncé à docs/cadrage.md:421, qui limite macOS à main et à la nuit : on ajoute au job un déclenchement manuel, pour essayer une branche.
@@ -186,6 +183,21 @@ Phase 2, « socle qualité, avant les fonctionnalités » (ton brief du 2026-11-
    - Tes choix (réponses du 2026-11-27, toutes « Recommandé ») : Maestro pour RAP-04, RAP-12, SCN-12 (M gardé jusqu'à la tâche 14), RAP-07, FPR-09 (prise de photo à confirmer quand l'écran existe), A11-09 (avec contrôle visuel manuel) ; hors réseau (CHR-01, SCN-04, SCN-09, FPR-08) par `setAirplaneMode` sur Android et coupure du build de test sur iOS. Colonne Niveau inchangée ; docs/criteres.md:34 et :220 mis à jour.
    - Non essayé : prise d'une photo, lecture d'un code-barres par la caméra, AVD tablette, tout iOS (tâche 14). Un échec isolé vu une fois avant les répétitions : course entre `clearState` et le relancement, côté Android (README, Stabilité).
    - Banc jetable `spikes/maestro/banc/` (app Java sans dépendance) pour les autorisations, la notification et la caméra. `connectedDebugAndroidTest` après l'ajout de `testTagsAsResourceId` : 2 sur 2.
+- 2026-11-28 : **tâche 11 close** : CI Linux sur chaque PR, `.github/workflows/ci-linux.yml` et `scripts/ci/`. PR #1 (https://github.com/pierrecanthelou/veganbrain/pull/1), job vert au run 46141765762 (commit 821ca5e, https://github.com/pierrecanthelou/veganbrain/actions/runs/46141765762) : LIS-08 (OngletsPresenterTest, 3), A11-01 (ContrastesTest, 5), A11-08 (ThemeSystemeTest, 2), flux Maestro `onglets`, nommés dans le résumé du job par `scripts/ci/resume-tests.py`, qui échoue si une suite exigée manque. Le merge reste à toi.
+   - Sourcé :
+     - Scan : binaire gitleaks 8.30.1, licence MIT, empreinte fixée. L'action gitleaks-action, sous licence propre depuis sa v2, n'est pas retenue.
+     - Secrets : sur une PR venant d'un fork, GitHub ne passe aucun secret hors `GITHUB_TOKEN`, qui y est en lecture seule (https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows). La CI n'utilise aucun secret : déclencheur `pull_request`, `permissions: contents: read`. Aucun secret introduit, le script des secrets n'est pas touché.
+     - Émulateur : android-emulator-runner 2.38.0, KVM activé par la règle udev de son README. L'action lance chaque ligne de `script` dans un `sh -c` séparé (src/script-parser.ts), d'où `scripts/ci/tests-emulateur.sh`.
+     - Cache Gradle `basic` (MIT) plutôt que le défaut `enhanced`, propriétaire (DISTRIBUTION.md de gradle/actions 6.4.1).
+   - Preuve d'échec du scan : un témoin, dans le job, fabrique au moment de l'exécution un jeton au format `github-pat` dans un dépôt jetable et exige que gitleaks échoue avec cette règle. Aucun faux secret dans le dépôt. Les essais en local de gitleaks et d'actionlint ont été refusés par le classifieur de permissions (téléchargement puis exécution d'un binaire) ; je ne les ai pas contournés, et actionlint n'a tourné nulle part. Le 2026-11-28, tu as accepté le témoin en CI comme preuve, à la place d'un essai en local (réponse « Le témoin suffit (Recommandé) »). Au run 46141765762 : « Témoin : code de sortie 1, règles github-pat », puis « no leaks found » sur l'historique.
+   - Émulateur, ce qu'il a fallu corriger (journaux des runs) :
+     - Mémoire : l'AVD créé par l'action démarrait avec 96 Mo (OOM d'init, panique du noyau, redémarrage en boucle). `ram-size: '4096'`, en Mo sans suffixe : l'émulateur 36.4.9 lisait `4096M` comme 96 Mo.
+     - Partition de données : « Requested internal only, but not enough space » pour l'APK de 12 Mo. `disk-size: 4096M`.
+     - Image : en `android-36.1;google_apis;x86_64`, surfaceflinger s'arrêtait toutes les 20 à 26 s sur « Assertion failed: !rcEnc->featureInfo()->hasReadColorBufferDma » (mapper.ranchu.so, tampon crash du logcat), avec l'émulateur 37.3.10 comme avec le 36.4.9 épinglé. Zygote repartait, et les tests partaient avant que l'utilisateur soit déverrouillé (« user not unlocked »), d'où « Unable to resolve activity ». Pas reproduit sur ce poste avec le même rendu (`-gpu swiftshader_indirect`, image playstore, 5 minutes). La CI tourne sur `android-35;google_apis;x86_64`, émulateur par défaut (37.3.10) : aucun plantage natif, 2 tests sur 2, flux passé.
+     - Maven Central a répondu 429 deux fois au build ; relance de l'étape. Hypothèse non vérifiée : setup-gradle n'écrit son cache que depuis la branche par défaut, si bien que chaque run de PR retélécharge tout tant que main n'a pas tourné.
+   - Écart : parité perdue avec l'AVD du spike (API 36.1, Play), puisque la CI est en API 35 sans Play. Aucun des tests actuels n'utilise Play ni l'API 36. Cause du plantage en 36.1 sous Linux non établie.
+   - Diagnostic gardé : à la sortie de `tests-emulateur.sh`, le tampon crash du logcat est imprimé et le logcat complet joint aux rapports (`build/emulateur/logcat.txt`).
+   - docs/criteres.md : inchangé. À revoir avec les premiers flux qui touchent aux autorisations : l'effet nul de la clé `all` (docs/criteres.md:34) a été vu sur Android 16 (spike), la CI tourne en Android 15 (API 35), où il n'est pas vérifié.
 
 ## À trancher
 
