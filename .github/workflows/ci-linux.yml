@@ -83,25 +83,25 @@ jobs:
           df -h /
           ls -l /dev/kvm
 
-      # Image google_apis et non google_apis_playstore comme l'AVD du spike : plus légère, et ni
-      # ThemeSystemeTest ni le flux onglets n'ont besoin de Play. Les deux images existent en 36.1 x86_64
-      # (sys-img2-4.xml de Google). `-show-kernel` montre où le démarrage s'arrête, à retirer une fois au vert.
+      # Image google_apis en API 35, et non l'image 36.1 google_apis_playstore de l'AVD du spike :
+      # - en 36.1 (google_apis), surfaceflinger s'arrêtait toutes les 20 à 26 s sur « Assertion failed:
+      #   !rcEnc->featureInfo()->hasReadColorBufferDma » (mapper.ranchu.so, tampon crash du logcat), avec
+      #   l'émulateur 37.3.10 comme avec le 36.4.9. Zygote repartait, l'utilisateur n'était pas encore
+      #   déverrouillé au lancement des tests, d'où « Unable to resolve activity ». Pas reproduit sous Windows
+      #   avec le même rendu (`-gpu swiftshader_indirect`, image playstore) ;
+      # - ni ThemeSystemeTest ni le flux onglets n'ont besoin de Play ni de l'API 36.
+      # `-show-kernel` montre où le démarrage s'arrête, à retirer une fois au vert.
       # `ram-size` explicite : sans lui, l'AVD créé par l'action démarrait avec 96 Mo de mémoire, d'où un
       # OOM d'init, une panique du noyau et un redémarrage en boucle. Le runner a 4 cœurs et 15,7 Go (diagnostic).
-      # En Mo sans suffixe, comme hw.ramSize dans l'AVD du spike : l'émulateur 36.4.9 lit `4096M` comme 96 Mo
-      # (« Memory: 39816K/97744K » au démarrage du noyau), là où le 37.3.10 l'acceptait.
+      # En Mo sans suffixe, comme hw.ramSize dans l'AVD du spike : l'émulateur 36.4.9 lisait `4096M` comme
+      # 96 Mo (« Memory: 39816K/97744K » au démarrage du noyau).
       # `disk-size` aussi : la partition de données par défaut ne laissait pas installer l'APK de 12 Mo
       # (« Requested internal only, but not enough space »).
-      # `emulator-build` : émulateur 36.4.9 (build 14788078), celui du poste où ces tests passent. Avec le 37.3.10
-      # installé par défaut, surfaceflinger s'arrêtait toutes les 20 à 26 s sur « Assertion failed:
-      # !rcEnc->featureInfo()->hasReadColorBufferDma » (mapper.ranchu.so, logcat crash), ce qui relançait
-      # zygote et cassait l'installation de l'APK puis le lancement de l'activité de test.
       # `script` : l'action lance chaque ligne dans un `sh -c` séparé (src/script-parser.ts), d'où un seul script.
       - name: Tests sur émulateur
         uses: ReactiveCircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d # v2.38.0
         with:
-          api-level: '36.1'
-          emulator-build: '14788078'
+          api-level: 35
           target: google_apis
           arch: x86_64
           ram-size: '4096'
